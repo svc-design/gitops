@@ -17,18 +17,7 @@ spec:
     deepflow-agent:
       enabled: false
     prometheus:
-      enabled: true
-      server:
-        extraFlags:
-        - enable-feature=expand-external-labels
-        - web.enable-lifecycle
-        remoteWrite:
-        - name: remote_prometheus
-          url: 'https://prometheus.svc.plus/api/v1/write'
-      alertmanager:
-        enabled: false
-      rometheus-pushgateway:
-        enabled: false
+      enabled: false
     promtail:
       enabled: true
       config:
