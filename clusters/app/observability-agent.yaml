@@ -1,0 +1,41 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: my-application
+  namespace: default
+spec:
+  releaseName: my-release
+  targetNamespace: default
+  chart:
+    spec:
+      chart: observableagent
+      version: "0.1.6"
+      sourceRef:
+        kind: HelmRepository
+        name: stable
+        namespace: monitoring
+  interval: 1m
+  values:
+    deepflow-agent:
+      enabled: true
+      deepflowServerNodeIPS:
+        - 10.0.1.2
+      deepflowK8sClusterID: d-QKd3eUzvg9
+    prometheus:
+      enabled: true
+      server:
+        extraFlags:
+        - enable-feature=expand-external-labels
+        - web.enable-lifecycle
+        remoteWrite:
+        - name: remote_prometheus
+          url: 'https://prometheus.svc.plus/api/v1/write'
+      alertmanager:
+        enabled: false
+      rometheus-pushgateway:
+        enabled: false
+    promtail:
+      enabled: true
+      config:
+        clients:
+          - url: https://data-gateway.svc.plus/loki/api/v1/push
