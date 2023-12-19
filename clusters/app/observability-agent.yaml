@@ -1,11 +1,9 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-  name: my-application
-  namespace: default
+  name: observableagent
+  targetNamespace: monitoring
 spec:
-  releaseName: my-release
-  targetNamespace: default
   chart:
     spec:
       chart: observableagent
