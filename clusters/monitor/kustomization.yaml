@@ -5,3 +5,7 @@ resources:
   - namespace.yaml
   - helmrepo.yaml
   - observability-agent.yaml
+  - prometheus-server-configmap.yaml
+patchesStrategicMerge:
+  - alert-rules-patch.yaml
+  - recording-rules-patch.yaml
