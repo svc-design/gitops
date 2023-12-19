@@ -14,6 +14,8 @@ spec:
         namespace: monitoring
   interval: 1m
   values:
+    fluent-bit:
+      enabled: false
     deepflow-agent:
       enabled: false
     prometheus:
