@@ -17,8 +17,8 @@ spec:
     deepflow-agent:
       enabled: true
       deepflowServerNodeIPS:
-        - 10.0.1.2
-      deepflowK8sClusterID: d-QKd3eUzvg9
+        - 10.0.1.3
+      deepflowK8sClusterID: d-rUJ4CUKMUt
     prometheus:
       enabled: true
       server:
