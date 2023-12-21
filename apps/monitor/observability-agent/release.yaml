@@ -1,0 +1,50 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: stable
+  namespace: monitoring
+spec:
+  interval: 1m
+  url: https://charts.onwalk.net/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: observabilityagent
+  namespace: monitoring
+spec:
+  chart:
+    spec:
+      chart: observabilityagent
+      version: "0.1.6"
+      sourceRef:
+        kind: HelmRepository
+        name: stable
+        namespace: monitoring
+  interval: 1m
+  values:
+    fluent-bit:
+      enabled: false
+    deepflow-agent:
+      enabled: true
+      deepflowServerNodeIPS:
+        - 10.0.1.3
+      deepflowK8sClusterID: d-rUJ4CUKMUt
+    prometheus:
+      enabled: false
+      server:
+        extraFlags:
+        - enable-feature=expand-external-labels
+        - web.enable-lifecycle
+        remoteWrite:
+        - name: remote_prometheus
+          url: 'https://prometheus.svc.ink/api/v1/write'
+      alertmanager:
+        enabled: false
+      prometheus-pushgateway:
+        enabled: false
+    promtail:
+      enabled: true
+      config:
+        clients:
+          - url: https://data-gateway.svc.ink/loki/api/v1/push
