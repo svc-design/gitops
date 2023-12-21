@@ -29,7 +29,7 @@ spec:
       enabled: true
     prometheus:
       enabled: true
-      agentMode: true
+      agentMode: false
       prometheusSpec:
         remoteWrite:
         - name: remote_prometheus
