@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - observability-agent.yaml
-  - prometheus-agent.yaml
+  - ../../apps/monitor/kube-prometheus-stack/
   - podmonitor.yaml
