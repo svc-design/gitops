@@ -1,0 +1,25 @@
+apiVersion: v1
+data:
+  prometheus.yml: |
+    scrape_configs:
+    - job_name: 'fluxcd-controller-metrics'
+      targets: 
+        - 'kustomize-controller-metrics:8080'
+        - 'helm-controller-metrics:8080'
+        - 'source-controller-metrics:8080'
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: observabilityagent
+    meta.helm.sh/release-namespace: monitoring
+  labels:
+    app: prometheus
+    app.kubernetes.io/managed-by: Helm
+    chart: prometheus-18.4.0
+    component: server
+    helm.toolkit.fluxcd.io/name: observabilityagent
+    helm.toolkit.fluxcd.io/namespace: monitoring
+    heritage: Helm
+    release: observabilityagent
+  name: observabilityagent-prometheus-server
+  namespace: monitoring
