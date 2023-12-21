@@ -38,3 +38,5 @@ spec:
       enabled: false
     prometheus-windows-exporter:
       enabled: false
+    alertmanager:
+      enabled: false

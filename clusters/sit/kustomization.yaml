@@ -5,3 +5,4 @@ resources:
   - namespace.yaml
   - prometheus-agent.yaml
   - observability-agent.yaml
+  - podmonitor.yaml
