@@ -5,6 +5,11 @@ resources:
   - namespace.yaml
   - observability-agent.yaml
   - prometheus-agent-configmap.yaml
-  - fluxcd-metrics.yaml
-patchesStrategicMerge:
+patches:
   - prometheus-agent-configmap-patch-fluxcd.yaml
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: gitops-system
+resources:
+  - fluxcd-metrics.yaml
