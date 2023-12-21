@@ -4,3 +4,7 @@ namespace: monitoring
 resources:
   - namespace.yaml
   - observability-agent.yaml
+  - prometheus-agent-configmap.yaml
+  - fluxcd-metrics.yaml
+patchesStrategicMerge:
+  - prometheus-agent-configmap-patch-fluxcd.yaml
