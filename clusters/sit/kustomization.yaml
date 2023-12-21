@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - observability-agent.yaml
-#  - prometheus-operator-agent.yaml
+  - prometheus-operator-agent.yaml
