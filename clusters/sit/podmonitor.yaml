@@ -8,7 +8,7 @@ metadata:
 spec:
   namespaceSelector:
     matchNames:
-      - flux-system
+      - gitops-system
   selector:
     matchExpressions:
       - key: app
