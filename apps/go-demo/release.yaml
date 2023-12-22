@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+      - name: demo
+        image: artifact.onwalk.net/base/scaffolding-design/go:fe2a0fba3014709b26d8acd75bacb661bf2522a4
+        imagePullPolicy: Always
