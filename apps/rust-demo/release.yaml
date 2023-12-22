@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
-  namespace: demo
+  name: app-rust
+  namespace: demo-rust
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo
+      app: demo-rust
   template:
     metadata:
       labels:
-        app: demo
+        app: demo-rust
     spec:
       containers:
-      - name: demo
+      - name: demo-rust
         image: artifact.onwalk.net/base/scaffolding-design/rust:84a66d19f29c20c57127f5c896d00b0b84dcd986
         imagePullPolicy: Always

@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-js
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo-js
+  template:
+    metadata:
+      labels:
+        app: demo-js
+    spec:
+      containers:
+      - name: frontend
+        image: artifact.onwalk.net/base/scaffolding-design/javascript-frontend:fc998a6d433c45986dc7d51ab62bf7aa48613d62
+        imagePullPolicy: Always
+      - name: backend
+        image: artifact.onwalk.net/base/scaffolding-design/javascript-backend:fc998a6d433c45986dc7d51ab62bf7aa48613d62
+        imagePullPolicy: Always
