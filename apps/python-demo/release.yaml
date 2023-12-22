@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app
-  namespace: demo
+  name: app-python
+  namespace: demo-python
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: demo
+      app: demo-python
   template:
     metadata:
       labels:
-        app: demo
+        app: demo-python
     spec:
       containers:
-      - name: demo
+      - name: demo-python
         image: artifact.onwalk.net/base/scaffolding-design/python:d72ba38f7a3a76b71eb50f00fe46a94497e6ecaa
         imagePullPolicy: Always
