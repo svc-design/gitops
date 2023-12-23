@@ -1,19 +1,28 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
 metadata:
-  name: app-c
+  name: stable
   namespace: demo-c
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: demo-c
-  template:
-    metadata:
-      labels:
-        app: demo-c
+  interval: 1m
+  url: https://charts.onwalk.net/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: demo-c
+  namespace: demo-c
+spec:
+  chart:
     spec:
-      containers:
-      - name: demo-c
-        image: artifact.onwalk.net/base/scaffolding-design/c:dee1c17b11822997e16e71244b1a1e98fe919688 
-        imagePullPolicy: Always
+      chart: app
+      version: "0.1.6"
+      sourceRef:
+        kind: HelmRepository
+        name: stable
+        namespace: demo-c
+  interval: 1m
+  values:
+    image:
+      repository: artifact.onwalk.net/base/scaffolding-design/c
+      tag: "dee1c17b11822997e16e71244b1a1e98fe919688"
