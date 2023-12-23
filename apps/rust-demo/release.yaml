@@ -1,19 +1,28 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
 metadata:
-  name: app-rust
+  name: stable
   namespace: demo-rust
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: demo-rust
-  template:
-    metadata:
-      labels:
-        app: demo-rust
+  interval: 1m
+  url: https://charts.onwalk.net/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: stable
+  namespace: demo-rust
+spec:
+  chart:
     spec:
-      containers:
-      - name: demo-rust
-        image: artifact.onwalk.net/base/scaffolding-design/rust:84a66d19f29c20c57127f5c896d00b0b84dcd986
-        imagePullPolicy: Always
+      chart: app
+      version: "0.1.1"
+      sourceRef:
+        kind: HelmRepository
+        name: stable
+        namespace: demo-rust
+  interval: 1m
+  values:
+    image:
+      repository: artifact.onwalk.net/base/scaffolding-design/rust
+      tag: "84a66d19f29c20c57127f5c896d00b0b84dcd986"
