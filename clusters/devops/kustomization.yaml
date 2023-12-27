@@ -4,6 +4,7 @@ resources:
   - namespace.yaml
   - ../../apps/monitor/observability-agent/
   - ../../apps/monitor/kube-prometheus-stack/
+  - ../../apps/monitor/flagger/
   - podmonitor.yaml
   - ../../apps/c-demo/
   - ../../apps/js-demo/
