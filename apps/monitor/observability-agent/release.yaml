@@ -38,7 +38,7 @@ spec:
         - web.enable-lifecycle
         remoteWrite:
         - name: remote_prometheus
-          url: 'https://prometheus.svc.ink/api/v1/write'
+          url: 'https://prometheus.svc.plus/api/v1/write'
       alertmanager:
         enabled: false
       prometheus-pushgateway:
@@ -47,4 +47,4 @@ spec:
       enabled: true
       config:
         clients:
-          - url: https://data-gateway.svc.ink/loki/api/v1/push
+          - url: https://data-gateway.svc.plus/loki/api/v1/push
