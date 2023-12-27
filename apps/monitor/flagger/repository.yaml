@@ -2,6 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: flagger
+  namespace: ingress
 spec:
   interval: 10m0s
   url: https://flagger.app 
