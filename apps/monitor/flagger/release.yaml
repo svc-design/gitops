@@ -20,4 +20,4 @@ spec:
     prometheus:
       install:false
     meshProvider: nginx
-    metricsServer: "https://prometheus.svc.ink"
+    metricsServer: "https://prometheus.svc.plus"
