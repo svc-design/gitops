@@ -6,9 +6,9 @@ metadata:
   name: flagger
   namespace: monitoring
 spec:
-  ingressClassName: nginx
+  ingressClassName: apisix
   rules:
-  - host: flaggerloadtester.svc.plus
+  - host: flaggerloadtester.svc-dev.ink
     http:
       paths:
       - backend:
@@ -20,5 +20,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - flaggerloadtester.svc.plus
+    - flaggerloadtester.svc-dev.ink
     secretName: obs-tls

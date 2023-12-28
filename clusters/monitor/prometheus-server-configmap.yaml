@@ -332,7 +332,7 @@ data:
       alertmanagers:
         - static_configs:
           - targets:
-            - alertmanager.svc.plus
+            - alertmanager.svc-dev.ink
   recording_rules.yml: |
     {}
   rules: |
