@@ -36,8 +36,8 @@ spec:
         name: agent
         extraFlags:
         - web.enable-lifecycle
+        - storage.tsdb.retention.time=30m
         - enable-feature=expand-external-labels
-        - storage.agent.retention.max-time=30m
         remoteWrite:
         - name: remote_prometheus
           url: 'https://prometheus.svc.plus/api/v1/write'
