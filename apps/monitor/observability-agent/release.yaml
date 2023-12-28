@@ -31,7 +31,7 @@ spec:
         - 10.0.1.3
       deepflowK8sClusterID: d-rUJ4CUKMUt
     prometheus:
-      enabled: false
+      enabled: true
       server:
         extraFlags:
         - enable-feature=expand-external-labels
