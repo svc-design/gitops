@@ -46,46 +46,11 @@ spec:
         podMonitorSelector:
           matchLabels:
             app.kubernetes.io/component: monitoring
+    defaultRules:
+      create: false
     grafana:
       enabled: false
     prometheus-windows-exporter:
       enabled: false
     alertmanager:
       enabled: false
-    defaultRules:
-      create: true
-      rules:
-        etcd: false
-        alertmanager: false
-        windows: false
-        configReloaders: true
-        general: true
-        k8sContainerCpuUsageSecondsTotal: true
-        k8sContainerMemoryCache: true
-        k8sContainerMemoryRss: true
-        k8sContainerMemorySwap: true
-        k8sContainerResource: true
-        k8sContainerMemoryWorkingSetBytes: true
-        k8sPodOwner: true
-        kubeApiserverAvailability: true
-        kubeApiserverBurnrate: true
-        kubeApiserverHistogram: true
-        kubeApiserverSlos: true
-        kubeControllerManager: true
-        kubelet: true
-        kubeProxy: true
-        kubePrometheusGeneral: true
-        kubePrometheusNodeRecording: true
-        kubernetesApps: true
-        kubernetesResources: true
-        kubernetesStorage: true
-        kubernetesSystem: true
-        kubeSchedulerAlerting: true
-        kubeSchedulerRecording: true
-        kubeStateMetrics: true
-        network: true
-        node: true
-        nodeExporterAlerting: true
-        nodeExporterRecording: true
-        prometheus: true
-        prometheusOperator: true
