@@ -36,7 +36,7 @@ spec:
       prometheusSpec:
         remoteWrite:
         - name: remote_prometheus
-          url: 'https://prometheus.svc.plus/api/v1/write'
+          url: 'https://prometheus.svc-dev.ink/api/v1/write'
         retention: 24h
         resources:
           requests:
