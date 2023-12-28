@@ -3,10 +3,12 @@ kind: Kustomization
 namespace: monitoring
 resources:
   - ../../apps/monitor/flagger/
+  - ../../apps/monitor/flagger-loadtester/
   - namespace.yaml
   - helmrepo.yaml
   - observability-agent.yaml
   - prometheus-server-configmap.yaml
+  - ingress-flagger.yaml
 patchesStrategicMerge:
   - alert-rules-patch.yaml
   - recording-rules-patch.yaml

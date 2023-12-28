@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  name: flagger
+  namespace: monitoring
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: flagger-loadtester.svc.plus
+    http:
+      paths:
+      - backend:
+          service:
+            name: flagger-loadtester
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - flagger-loadtester.svc.plus
+    secretName: obs-tls
