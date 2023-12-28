@@ -1,25 +1,18 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
-  name: nginx
-  namespace: monitoring
+  name: nginx-ingress-podmonitor
   labels:
     app.kubernetes.io/part-of: nginx
     app.kubernetes.io/component: monitoring
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: nginx
   namespaceSelector:
     matchNames:
       - ingress
-  selector:
-    matchExpressions:
-      - key: app
-        operator: In
-        values:
-          - nginx
   podMetricsEndpoints:
     - port: "9113"
-      relabelings:
-        # https://github.com/prometheus-operator/prometheus-operator/issues/4816
-        - sourceLabels: [__meta_kubernetes_pod_phase]
-          action: keep
-          regex: Running
+      interval: 30s
+      path: /metrics
