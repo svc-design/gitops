@@ -33,12 +33,17 @@ spec:
     prometheus:
       enabled: true
       server:
+        name: agent
         extraFlags:
+        - enable-feature=agent
         - enable-feature=expand-external-labels
+        - storage.agent.retention.max-time=30m
         - web.enable-lifecycle
         remoteWrite:
         - name: remote_prometheus
           url: 'https://prometheus.svc.plus/api/v1/write'
+        persistentVolume:
+          enabled: false
       alertmanager:
         enabled: false
       prometheus-pushgateway:
