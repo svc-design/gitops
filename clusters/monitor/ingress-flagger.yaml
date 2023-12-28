@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: flagger-loadtester.svc.plus
+  - host: flaggerloadtester.svc.plus
     http:
       paths:
       - backend:
@@ -20,5 +20,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - flagger-loadtester.svc.plus
+    - flaggerloadtester.svc.plus
     secretName: obs-tls
