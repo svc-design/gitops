@@ -4,6 +4,8 @@ namespace: monitoring
 resources:
   - repository.yaml
   - release.yaml
+  - podmonitor-gitops-system.yaml
+  - podmonitor-ingress.yaml
 configMapGenerator:
   - name: flux-kube-state-metrics-config
     files:
