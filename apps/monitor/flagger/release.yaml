@@ -19,3 +19,6 @@ spec:
       install: false
     meshProvider: nginx
     metricsServer: "https://prometheus.svc.plus"
+    serviceMonitor:
+      enabled: true
+      namespace: monitoring
