@@ -26,3 +26,5 @@ spec:
     image:
       repository: artifact.onwalk.net/base/scaffolding-design/go
       tag: "fe2a0fba3014709b26d8acd75bacb661bf2522a4"
+    ingress:
+      className: "apisix"
