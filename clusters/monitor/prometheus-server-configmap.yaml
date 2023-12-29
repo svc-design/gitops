@@ -332,7 +332,7 @@ data:
       alertmanagers:
         - static_configs:
           - targets:
-            - alertmanager.demo-dev.ink
+            - alertmanager.demo-uat.ink
   recording_rules.yml: |
     {}
   rules: |
