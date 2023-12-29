@@ -40,7 +40,7 @@ spec:
       release: prometheus-agent
   remoteWrite:
   - name: remote_prometheus
-    url: https://prometheus.demo-dev.ink/api/v1/write
+    url: https://prometheus.demo-uat.ink/api/v1/write
   replicas: 1
   resources:
     requests:
