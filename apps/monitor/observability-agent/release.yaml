@@ -31,7 +31,7 @@ spec:
         - 10.0.1.3
       deepflowK8sClusterID: d-rUJ4CUKMUt
     prometheus:
-      enabled: false
+      enabled: true
       server:
         name: agent
         retention: "30m"
@@ -46,6 +46,10 @@ spec:
       alertmanager:
         enabled: false
       prometheus-pushgateway:
+        enabled: false
+      kube-state-metrics:
+        enabled: false
+      prometheus-node-exporter:
         enabled: false
     promtail:
       enabled: true
