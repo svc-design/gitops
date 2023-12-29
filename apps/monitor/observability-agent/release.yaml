@@ -40,7 +40,7 @@ spec:
         - enable-feature=expand-external-labels
         remoteWrite:
         - name: remote_prometheus
-          url: 'https://prometheus.svc-dev.ink/api/v1/write'
+          url: 'https://prometheus.demo-dev.ink/api/v1/write'
         persistentVolume:
           enabled: false
       alertmanager:
@@ -51,4 +51,4 @@ spec:
       enabled: true
       config:
         clients:
-          - url: https://data-gateway.svc-dev.ink/loki/api/v1/push
+          - url: https://data-gateway.demo-dev.ink/loki/api/v1/push
