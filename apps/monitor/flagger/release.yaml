@@ -18,7 +18,7 @@ spec:
     prometheus:
       install: false
     meshProvider: nginx
-    metricsServer: "https://prometheus.demo-uat.ink"
+    metricsServer: "https://prometheus.svc-dev.ink"
     serviceMonitor:
       enabled: true
       namespace: monitoring

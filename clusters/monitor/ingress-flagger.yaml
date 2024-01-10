@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: apisix
   rules:
-  - host: flaggerloadtester.demo-uat.ink
+  - host: flaggerloadtester.svc-dev.ink
     http:
       paths:
       - backend:
@@ -20,5 +20,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - flaggerloadtester.demo-uat.ink
+    - flaggerloadtester.svc-dev.ink
     secretName: obs-tls
