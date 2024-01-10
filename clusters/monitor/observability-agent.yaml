@@ -24,4 +24,4 @@ spec:
       enabled: true
       config:
         clients:
-          - url: https://data-gateway.demo-uat.ink/loki/api/v1/push
+          - url: https://data-gateway.svc-dev.ink/loki/api/v1/push
