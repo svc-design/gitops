@@ -27,4 +27,4 @@ spec:
       repository: artifact.onwalk.net/base/scaffolding-design/javascript-frontend
       tag: "fc998a6d433c45986dc7d51ab62bf7aa48613d62"
     ingress:
-      className: "apisix"
+      className: "nginx"

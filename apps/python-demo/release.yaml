@@ -27,4 +27,4 @@ spec:
       repository: artifact.onwalk.net/base/scaffolding-design/python
       tag: "d72ba38f7a3a76b71eb50f00fe46a94497e6ecaa"
     ingress:
-      className: "apisix"
+      className: "nginx"
