@@ -1,4 +1,4 @@
-apiVersion: source.toolkit.fluxcd.io/v1beta2
+apps/go-demo/release.yaml apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
   name: stable
@@ -27,4 +27,4 @@ spec:
       repository: artifact.onwalk.net/base/scaffolding-design/go
       tag: "fe2a0fba3014709b26d8acd75bacb661bf2522a4"
     ingress:
-      className: "apisix"
+      className: "nginx"

@@ -6,7 +6,7 @@ metadata:
   name: flagger
   namespace: monitoring
 spec:
-  ingressClassName: apisix
+  ingressClassName: nginx
   rules:
   - host: flaggerloadtester.svc-dev.ink
     http:
