@@ -10,6 +10,6 @@ resources:
   - observability-agent.yaml
   - prometheus-server-configmap.yaml
   - ingress-flagger.yaml
-patchesStrategicMerge:
+patches:
   - alert-rules-patch.yaml
   - recording-rules-patch.yaml
