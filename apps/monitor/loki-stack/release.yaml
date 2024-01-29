@@ -22,6 +22,27 @@ spec:
     loki:
       enabled: true
       isDefault: false
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        hosts:
+          - host: loki.svc-dev.ink
+            paths: []
+        tls:
+          - secretName: obs-tls
+            hosts:
+              - loki.svc-dev.ink
+      ruler:
+        storage:
+          type: local
+          local:
+            directory: /rules
+        rule_path: /tmp/scratch
+        alertmanager_url: https://alertmanager.svc-dev.ink
+        ring:
+          kvstore:
+            store: inmemory
+        enable_api: true
       serviceMonitor:
         enabled: true
         additionalLabels:
