@@ -4,6 +4,7 @@ namespace: monitoring
 resources:
   - ../../apps/monitor/flagger/
   - ../../apps/monitor/flagger-loadtester/
+  - ../../apps/monitor/loki-stack
   - namespace.yaml
   - helmrepo.yaml
   - observability-agent.yaml
