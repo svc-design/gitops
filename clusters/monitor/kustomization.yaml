@@ -9,6 +9,6 @@ resources:
   - helmrepo.yaml
   - observability-agent.yaml
   - prometheus-server-configmap.yaml
-  - ingress-flagger.yaml
-  - alert-rules-patch.yaml
-  - recording-rules-patch.yaml
+ - ingress-flagger.yaml
+#  - alert-rules-patch.yaml
+#  - recording-rules-patch.yaml
