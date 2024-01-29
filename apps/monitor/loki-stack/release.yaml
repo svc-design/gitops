@@ -27,7 +27,8 @@ spec:
         ingressClassName: nginx
         hosts:
           - host: loki.svc-dev.ink
-            paths: []
+            paths:
+              - "/"
         tls:
           - secretName: obs-tls
             hosts:
