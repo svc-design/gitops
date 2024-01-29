@@ -4,5 +4,5 @@ metadata:
   name: flagger
   namespace: ingress
 spec:
-  interval: 10m0s
+  interval: 1m0s
   url: https://flagger.app 

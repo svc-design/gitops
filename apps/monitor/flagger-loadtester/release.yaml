@@ -11,6 +11,6 @@ spec:
       chart: flagger-loadtester
       sourceRef:
         kind: HelmRepository
-        name: flagger
+        name: flaggerload
         namespace: monitoring
       interval: 1m

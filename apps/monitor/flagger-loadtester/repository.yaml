@@ -1,8 +1,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1beta2
 kind: HelmRepository
 metadata:
-  name: flagger
+  name: flaggerload
   namespace: monitoring
 spec:
-  interval: 10m0s
+  interval: 1m0s
   url: https://flagger.app 
