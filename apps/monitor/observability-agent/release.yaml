@@ -55,4 +55,4 @@ spec:
       enabled: true
       config:
         clients:
-          - url: https://data-gateway.svc-dev.ink/loki/api/v1/push
+          - url: https://loki.svc-dev.ink/api/v1/push
