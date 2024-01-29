@@ -3,9 +3,9 @@ kind: HelmRelease
 metadata:
   name: loki-stack
 spec:
-  interval: 5m
-  dependsOn:
-    - name: kube-prometheus-stack
+  interval: 1m
+#  dependsOn:
+#    - name: kube-prometheus-stack
   chart:
     spec:
       version: "2.x"
