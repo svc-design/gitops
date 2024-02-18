@@ -25,6 +25,14 @@ spec:
   values:
     fluent-bit:
       enabled: false
+    telegraf:
+      enabled: true
+      config:
+        outputs:
+          - influxdb:
+              urls:
+                - "influxdb.svc-dev.ink"
+              database: "telegraf"
     deepflow-agent:
       enabled: true
       deepflowServerNodeIPS:
