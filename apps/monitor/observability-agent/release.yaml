@@ -54,7 +54,7 @@ spec:
         outputs:
           - influxdb:
               urls:
-                - "influxdb.svc-dev.ink"
+                - "https://influxdb.svc-dev.ink"
               database: "telegraf"
         inputs:
           - net:
