@@ -7,10 +7,10 @@ spec:
   interval: 1m
   chart:
     spec:
-      version: "0.1.12"
+      version: "0.1.13"
       chart: itsm
       sourceRef:
         kind: HelmRepository
-        name: itsm
+        name: stable
         namespace: itsm-dev
       interval: 1m
