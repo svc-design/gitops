@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: itsm-dev
+  namespace: itsm-dev
+spec:
+  interval: 1m
+  chart:
+    spec:
+      version: "0.1.12"
+      chart: itsm
+      sourceRef:
+        kind: HelmRepository
+        name: itsm
+        namespace: itsm-dev
+      interval: 1m
+  values:
+    apisix:
+      enabled: false
+    novu:
+      enabled: false
+    windmill:
+      enabled: false
+    postgresql:
+      enabled: false
+    minio:
+      enabled: false
+    mongodb:
+      enabled: false
+    redis:
+      enabled: true
+      nameOverride: "redis"
+      architecture: standalone
+      global:
+        imageRegistry: ""
+        redis:
+          password: "redis"
+      auth:
+        enabled: true
+        sentinel: false
+        password: ""
+      master:
+        persistence:
+          enabled: false
+        resources:
+          requests:
+            memory: 100Mi
+            cpu: 100m
+          limits:
+            cpu: "200m"
+            memory: "300Mi"

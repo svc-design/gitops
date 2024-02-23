@@ -1,0 +1,16 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: itsm-dev
+  namespace: itsm-dev
+spec:
+  interval: 1m
+  chart:
+    spec:
+      version: "0.1.12"
+      chart: itsm
+      sourceRef:
+        kind: HelmRepository
+        name: itsm
+        namespace: itsm-dev
+      interval: 1m
