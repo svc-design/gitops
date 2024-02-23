@@ -7,4 +7,4 @@ resources:
   - ../../apps/postgresql/
   - ../../apps/redis/
   - ../../apps/mongodb/
-#  - ../../apps/minio/
+  - ../../apps/minio/
