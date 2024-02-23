@@ -6,5 +6,5 @@ resources:
   - ../../apps/itsm-dev/
   - ../../apps/postgresql/
   - ../../apps/redis/
-#  - ../../apps/mongodb/
+  - ../../apps/mongodb/
 #  - ../../apps/minio/
