@@ -1,0 +1,50 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta2
+kind: HelmRelease
+metadata:
+  name: itsm-dev
+  namespace: itsm-dev
+spec:
+  interval: 1m
+  chart:
+    spec:
+      version: "0.1.12"
+      chart: itsm
+      sourceRef:
+        kind: HelmRepository
+        name: itsm
+        namespace: itsm-dev
+      interval: 1m
+  values:
+    apisix:
+      enabled: false
+    novu:
+      enabled: false
+    windmill:
+      enabled: false
+    postgresql:
+      enabled: false
+    redis:
+      enabled: false
+    mongodb:
+      enabled: false
+    minio:
+      enabled: true
+      nameOverride: minio
+      mode: distributed
+      replicas: 4
+      ingress:
+        enabled: true
+        ingressClassName: "nginx"
+        hosts:
+          - minio.local
+      persistence:
+        enabled: false
+        size: 10Gi
+      existingSecret: minio-secret
+      resources:
+        requests:
+          memory: 50Mi
+          cpu: 50m
+        limits:
+          cpu: "100m"
+          memory: "100Mi"
