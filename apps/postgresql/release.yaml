@@ -1,50 +1,37 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: itsm-dev
+  name: postgresql
   namespace: itsm-dev
 spec:
   interval: 1m
   chart:
     spec:
-      version: "0.1.12"
-      chart: itsm
+      version: "0.1.13"
+      chart: postgresql
       sourceRef:
         kind: HelmRepository
-        name: itsm
+        name: stable
         namespace: itsm-dev
       interval: 1m
   values:
-    apisix:
-      enabled: false
-    novu:
-      enabled: false
-    windmill:
-      enabled: false
-    minio:
-      enabled: false
-    redis:
-      enabled: false
-    mongodb:
-      enabled: false
-    postgresql:
-      enabled: true
-      fullnameOverride: windmill-postgresql
-      global:
-        imageRegistry: ""
-        postgresql:
-          auth:
-            postgresPassword: "windmill"
-            username: "postgres"
-            password: "windmill"
-            database: "windmill"
-      primary:
-        persistence:
-          enabled: true
-        resources:
-          requests:
-            memory: 100Mi
-            cpu: 100m
-          limits:
-            cpu: "200m"
-            memory: "300Mi"
+    enabled: true
+    fullnameOverride: windmill-postgresql
+    global:
+      imageRegistry: ""
+      postgresql:
+        auth:
+          postgresPassword: "windmill"
+          username: "postgres"
+          password: "windmill"
+          database: "windmill"
+    primary:
+      persistence:
+        enabled: true
+      resources:
+        requests:
+          memory: 100Mi
+          cpu: 100m
+        limits:
+          cpu: "200m"
+          memory: "300Mi"
