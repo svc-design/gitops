@@ -1,57 +1,44 @@
 apiVersion: helm.toolkit.fluxcd.io/v2beta2
 kind: HelmRelease
 metadata:
-  name: itsm-dev
+  name: mongodb
   namespace: itsm-dev
 spec:
   interval: 1m
   chart:
     spec:
-      version: "0.1.12"
-      chart: itsm
+      version: "0.1.13"
+      chart: mongodb
       sourceRef:
         kind: HelmRepository
-        name: itsm
+        name: stable
         namespace: itsm-dev
       interval: 1m
   values:
-    apisix:
-      enabled: false
-    novu:
-      enabled: false
-    windmill:
-      enabled: false
-    postgresql:
-      enabled: false
-    minio:
-      enabled: false
-    redis:
-      enabled: false
-    mongodb:
+    enabled: true
+    nameOverride: "mongodb"
+    architecture: standalone
+    useStatefulSet: true
+    global:
+      imageRegistry: ""
+    persistence:
       enabled: true
-      nameOverride: "mongodb"
-      architecture: standalone
-      useStatefulSet: true
-      global:
-        imageRegistry: ""
-      persistence:
-        enabled: true
-      auth:
-        enabled: true
-        rootUser: root
-        rootPassword: "mongodb"
-        usernames:
-        - novu
-        passwords:
-        - novu
-        databases:
-        - novu-db
-      persistence:
-        enabled: true
-      resources:
-        requests:
-          memory: 100Mi
-          cpu: 100m
-        limits:
-          cpu: "500m"
-          memory: "500Mi"
+    auth:
+      enabled: true
+      rootUser: root
+      rootPassword: "mongodb"
+      usernames:
+      - novu
+      passwords:
+      - novu
+      databases:
+      - novu-db
+    persistence:
+      enabled: true
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        cpu: "500m"
+        memory: "500Mi"
