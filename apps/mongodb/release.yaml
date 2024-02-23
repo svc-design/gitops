@@ -33,8 +33,6 @@ spec:
       - novu
       databases:
       - novu-db
-    persistence:
-      enabled: true
     resources:
       requests:
         memory: 100Mi
