@@ -4,7 +4,7 @@ resources:
   - namespace.yaml
   - repository.yaml
   - ../../apps/itsm-dev/
-  - ../../apps/postgresql/
-  - ../../apps/redis/
-  - ../../apps/mongodb/
-  - ../../apps/minio/
+#  - ../../apps/postgresql/
+#  - ../../apps/redis/
+#  - ../../apps/mongodb/
+#  - ../../apps/minio/
