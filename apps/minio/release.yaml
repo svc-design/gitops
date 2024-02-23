@@ -8,7 +8,7 @@ spec:
   chart:
     spec:
       version: "5.0.15"
-      chart: itsm
+      chart: minio
       sourceRef:
         kind: HelmRepository
         name: stable
@@ -25,7 +25,7 @@ spec:
       hosts:
         - minio.local
     persistence:
-      enabled: false
+      enabled: true
       size: 10Gi
     existingSecret: minio-secret
     resources:
