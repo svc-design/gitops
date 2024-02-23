@@ -7,7 +7,7 @@ spec:
   interval: 1m
   chart:
     spec:
-      version: "0.1.13"
+      version: "5.0.15"
       chart: itsm
       sourceRef:
         kind: HelmRepository
@@ -17,8 +17,8 @@ spec:
   values:
     enabled: true
     nameOverride: minio
-    mode: distributed
-    replicas: 4
+    mode: standalone
+    replicas: 2
     ingress:
       enabled: true
       ingressClassName: "nginx"
