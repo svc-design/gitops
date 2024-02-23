@@ -5,6 +5,6 @@ resources:
   - repository.yaml
   - ../../apps/itsm-dev/
   - ../../apps/postgresql/
-#  - ../../apps/redis/
+  - ../../apps/redis/
 #  - ../../apps/mongodb/
 #  - ../../apps/minio/
