@@ -17,9 +17,6 @@ spec:
   values:
     etcd-adapter:
       enabled: true
-      fullnameOverride: apisix-etcd
-      service:
-        port: 2379
       mysql:
         host: mysql
         port: 3306
