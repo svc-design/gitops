@@ -7,7 +7,7 @@ spec:
   interval: 1m
   chart:
     spec:
-      version: "0.1.15"
+      version: "0.1.16"
       chart: itsm
       sourceRef:
         kind: HelmRepository
@@ -15,6 +15,8 @@ spec:
         namespace: itsm-dev
       interval: 1m
   values:
+    novu:
+      namespaceOverride: "itsm-dev"
     etcd-adapter:
       enabled: true
       fullnameOverride: apisix-etcd
