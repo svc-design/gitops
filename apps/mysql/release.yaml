@@ -15,8 +15,6 @@ spec:
         namespace: itsm-dev
       interval: 1m
   values:
-    enabled: true
-    fullnameOverride: mysql
     global:
       imageRegistry: "artifact.onwalk.net/public"
     architecture: standalone
