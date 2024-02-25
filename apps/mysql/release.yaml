@@ -18,7 +18,7 @@ spec:
     enabled: true
     fullnameOverride: mysql
     global:
-      imageRegistry: "artifact.onwalk.net"
+      imageRegistry: "artifact.onwalk.net/public"
     architecture: standalone
     auth:
       createDatabase: true
