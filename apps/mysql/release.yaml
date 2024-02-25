@@ -38,3 +38,5 @@ spec:
         limits:
           cpu: 200m
           memory: 400Mi
+    secondary:
+      replicaCount: 0
