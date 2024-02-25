@@ -20,7 +20,6 @@ spec:
     architecture: standalone
     auth:
       createDatabase: true
-      rootPassword: "mysqladmin"
       database: "apisix"
       username: "apisix"
       password: "apisix"
@@ -31,10 +30,8 @@ spec:
         size: 8Gi
       resources:
         requests:
-          cpu: 100m
-          memory: 200Mi
-        limits:
-          cpu: 200m
+          cpu: 250m
           memory: 400Mi
-    secondary:
-      replicaCount: 0
+        limits:
+          cpu: 500m
+          memory: 800Mi
