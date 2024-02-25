@@ -15,6 +15,21 @@ spec:
         namespace: itsm-dev
       interval: 1m
   values:
+    novu:
+      web:
+        ingress:
+          enabled: true
+          hostname: novu-web.onwalk.net
+          ingressClassName: 'nginx'
+    apisix:
+      dashboard:
+        ingress:
+          enabled: true
+          className: "nginx"
+          hosts:
+            - host: apisix-dashboard.onwalk.net
+              paths:
+                - /*
     etcd-adapter:
       enabled: true
       mysql:
