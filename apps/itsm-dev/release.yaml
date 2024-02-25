@@ -15,8 +15,6 @@ spec:
         namespace: itsm-dev
       interval: 1m
   values:
-    novu:
-      namespaceOverride: "itsm-dev"
     etcd-adapter:
       enabled: true
       fullnameOverride: apisix-etcd
