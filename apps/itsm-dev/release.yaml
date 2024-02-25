@@ -7,7 +7,7 @@ spec:
   interval: 1m
   chart:
     spec:
-      version: "0.1.14"
+      version: "0.1.15"
       chart: itsm
       sourceRef:
         kind: HelmRepository
