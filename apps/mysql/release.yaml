@@ -18,26 +18,23 @@ spec:
     enabled: true
     fullnameOverride: mysql
     global:
-      imageRegistry: ""
+      imageRegistry: "artifact.onwalk.net"
     architecture: standalone
     auth:
-      rootPassword: ""
       createDatabase: true
-      database: "my_database"
-      username: ""
-      password: ""
-      replicationUser: replicator
-      replicationPassword: ""
+      rootPassword: "mysqladmin"
+      database: "apisix"
+      username: "apisix"
+      password: "apisix"
       existingSecret: ""
-      usePasswordFiles: false
     primary:
       persistence:
         enabled: true
-        size: 1Gi
+        size: 8Gi
       resources:
         requests:
           cpu: 100m
-          memory: 100Mi
+          memory: 200Mi
         limits:
           cpu: 200m
           memory: 400Mi
