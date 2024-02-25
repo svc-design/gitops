@@ -20,17 +20,9 @@ spec:
       fullnameOverride: apisix-etcd
       service:
         port: 2379
-      config:
-        server:
-          host: 0.0.0.0
-          port: 2379
-        log:
-          level: info
-        datasource:
-          type: btree # btree of mysql
-          mysql:
-            host: mysql
-            port: 3306
-            username: apisix
-            password: apisix
-            database: apisix
+      mysql:
+        host: mysql
+        port: 3306
+        username: apisix
+        password: apisix
+        database: apisix
