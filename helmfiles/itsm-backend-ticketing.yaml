@@ -1,0 +1,49 @@
+repositories:
+- name: stable
+  url: https://charts.onwalk.net
+  username: {{ requiredEnv "ARF_USERNAME" }}
+  password: {{ requiredEnv "ARF_PASSWORD" | quote }}
+
+templates:
+  default: &default
+    namespace: itsm-tools-stg
+    createNamespace: false
+    chart: stable/app-backend
+    version: 0.1.3
+
+releases:
+  - name: itsm-ticketing
+    <<: *default
+    set:
+    - name: service.ports[0].name
+      value: http
+    - name: service.ports[0].protocol
+      value: TCP
+    - name: service.ports[0].port
+      value: 8000
+    - name: service.ports[0].targetPort
+      value: http
+    - name: service.ports[1].name
+      value: grpc
+    - name: service.ports[1].protocol
+      value: TCP
+    - name: service.ports[1].port
+      value: 9000
+    - name: service.ports[1].targetPort
+      value: grpc
+    - name: ports[0].name
+      value: http
+    - name: ports[0].protocol
+      value: TCP
+    - name: ports[0].containerPort
+      value: 3000
+    - name: ports[1].name
+      value: http
+    - name: ports[1].protocol
+      value: TCP
+    - name: ports[2].containerPort
+      value: 3000
+    - name: image.repository
+      value: artifact.onwalk.net/itsm/ticketing
+    - name: image.tag
+      value: 'unknown-fa7fed7'
