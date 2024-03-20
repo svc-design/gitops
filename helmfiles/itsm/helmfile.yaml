@@ -6,8 +6,8 @@ templates:
   default: &default
     namespace: itsm-dev
     createNamespace: true
-    chart: stable/itsm-tools
-    version: 0.1.18
+    chart: stable/itsm
+    version: 0.1.16
 
 releases:
   - name: itsm-dev
