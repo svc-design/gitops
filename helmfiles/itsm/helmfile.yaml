@@ -1,8 +1,6 @@
 repositories:
 - name: stable
   url: https://charts.onwalk.net
-  username: {{ requiredEnv "ARF_USERNAME" }}
-  password: {{ requiredEnv "ARF_PASSWORD" | quote }}
 
 templates:
   default: &default
