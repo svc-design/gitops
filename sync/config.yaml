@@ -1,8 +1,10 @@
-- name: Check system uptime
-  command: uptime
+- name: Local System Check
+  tasks:
+    - name: Check system uptime
+      shell: uptime
 
-- name: List current directory
-  command: ls -lah
+    - name: List current directory
+      shell: ls -lah
 
-- name: Show disk usage
-  command: df -h
+    - name: Show disk usage
+      shell: df -h
