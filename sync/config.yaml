@@ -1,0 +1,8 @@
+- name: Check system uptime
+  command: uptime
+
+- name: List current directory
+  command: ls -lah
+
+- name: Show disk usage
+  command: df -h
