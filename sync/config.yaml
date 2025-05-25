@@ -2,27 +2,34 @@
   tasks:
     - name: Install nginx (macOS/Homebrew or Linux/apt)
       shell: |
-        if command -v brew &>/dev/null; then
-          brew install nginx || true
-        elif command -v apt-get &>/dev/null; then
-          sudo apt-get update && sudo apt-get install -y nginx
+        if command -v nginx >/dev/null; then
+          echo "nginx already installed"
+        elif command -v brew >/dev/null; then
+          brew install nginx || echo "brew install failed or not allowed"
+        elif command -v apt >/dev/null; then
+          sudo apt update && sudo apt install -y nginx
         else
-          echo "⚠️ Unsupported OS"
+          echo "No supported package manager found"
         fi
 
     - name: Update /etc/hosts with test domain
       shell: |
-        echo "127.0.0.1 test.cw-agent.local" | sudo tee -a /etc/hosts
+        if ! grep -q "test.cw-agent.local" /etc/hosts; then
+          echo "127.0.0.1 test.cw-agent.local" | sudo tee -a /etc/hosts
+        fi
 
     - name: Create dummy SSL cert (for test)
       shell: |
-        mkdir -p /tmp/ssl
-        openssl req -x509 -newkey rsa:2048 -keyout /tmp/ssl/key.pem -out /tmp/ssl/cert.pem -days 1 -nodes -subj "/CN=test.cw-agent.local"
+        mkdir -p certs
+        openssl req -x509 -nodes -days 1 -newkey rsa:2048 \
+          -keyout certs/test.key \
+          -out certs/test.crt \
+          -subj "/CN=test.cw-agent.local"
 
     - name: Reload nginx (if available)
       shell: |
-        if command -v nginx &>/dev/null; then
-          sudo nginx -s reload || sudo brew services restart nginx
-        else
-          echo "nginx not found"
+        if command -v nginx >/dev/null; then
+          sudo nginx -s reload || true
+        elif command -v brew >/dev/null; then
+          brew services restart nginx || true
         fi
