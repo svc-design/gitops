@@ -1,10 +1,31 @@
-- name: Local System Check
+- name: Web Server Provision
   tasks:
-    - name: Check system uptime
-      shell: uptime
+    - name: Install nginx (macOS/Homebrew)
+      shell: |
+        if command -v brew &>/dev/null; then
+          brew install nginx || echo "nginx already installed"
+        else
+          echo "brew not found, skipping"
+        fi
 
-    - name: List current directory
-      shell: ls -lah
+    - name: Install nginx (Linux/Apt/Yum)
+      shell: |
+        if [ -f /etc/debian_version ]; then
+          sudo apt-get update && sudo apt-get install -y nginx
+        elif [ -f /etc/redhat-release ]; then
+          sudo yum install -y epel-release && sudo yum install -y nginx
+        else
+          echo "unsupported OS"
+        fi
 
-    - name: Show disk usage
-      shell: df -h
+    - name: Update /etc/hosts
+      shell: |
+        sudo sh -c 'echo "127.0.0.1 demo.local" >> /etc/hosts'
+
+    - name: Reload nginx
+      shell: |
+        sudo nginx -s reload || echo "nginx reload failed (may not be running)"
+
+    - name: Simulate SSL cert update
+      shell: |
+        mkdir -p /tmp/ssl && echo "dummy-cert" > /tmp/ssl/fullchain.pem
