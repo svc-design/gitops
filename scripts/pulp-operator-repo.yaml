@@ -4,7 +4,7 @@ kind: Secret
 metadata:
   name: 'example-pulp-admin-password'
 stringData:
-  password: 'xxxxxxxx'
+  password: 'a4h3ljbn'
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -12,14 +12,10 @@ metadata:
   name: settings
 data:
   analytics: "False"
-  token_server: '"https://artifact.onwalk.net/pulp/api/v3/token/"'
   content_origin: '"https://artifact.onwalk.net"'
-  ansible_api_hostname: '"https://artifact.onwalk.net"'
-  pypi_api_hostname: '"https://artifact.onwalk.net"'
-  api_root: '"/pulp/"'
+  api_root: '"/"'
   allowed_export_paths: '[ "/tmp" ]'
   allowed_import_paths: '[ "/tmp" ]'
-
 ---
 apiVersion: repo-manager.pulpproject.org/v1
 kind: Pulp
@@ -45,4 +41,3 @@ spec:
     enabled: true
     redis_storage_class: local-path
   ingress_type: none
-
