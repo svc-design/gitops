@@ -10,7 +10,7 @@ The role performs three main tasks:
 2. **Install NVIDIA drivers and container runtime** on the target hosts so that Kubernetes can access GPU resources.
 3. **Verify GPU access** by deploying the official NVIDIA device plugin and running a small CUDA workload.
 
-The following command is used to create the cluster:
+The following command is used to create the cluster (example with one master and one worker):
 
 ```bash
 sealos run \
@@ -35,7 +35,23 @@ Add the role to your playbook:
     - gpu-k8s
 ```
 
-Run the playbook with your inventory that contains the master and node IP addresses.
+Example playbook snippet defining the IP lists:
+
+```yaml
+- hosts: all
+  vars:
+    master_ips:
+      - "172.16.11.120"
+    node_ips:
+      - "172.16.11.152"
+  roles:
+    - gpu-k8s
+```
+
+The playbook expects `master_ips` and `node_ips` variables which are lists of IP addresses. Up to
+three masters can be specified.
+
+Run the playbook with your inventory that contains these IP addresses.
 
 ```bash
 ansible-playbook -i inventory/hosts/all playbooks/demo_gpu_k8s.yml

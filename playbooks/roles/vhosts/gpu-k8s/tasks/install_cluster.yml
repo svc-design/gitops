@@ -4,10 +4,10 @@
       registry.cn-shanghai.aliyuncs.com/labring/kubernetes:{{ sealos_version }} \
       registry.cn-shanghai.aliyuncs.com/labring/cilium:{{ cilium_version }} \
       registry.cn-shanghai.aliyuncs.com/labring/helm:{{ helm_version }} \
-      --masters {{ master_ip }} \
-      --nodes {{ node_ip }} \
+      --masters {{ master_ips | join(',') }} \
+      --nodes {{ node_ips | join(',') }} \
       --env '{{ sealos_cmd_env }}' \
       --cmd "{{ kubeadm_init_cmd }}"
   args:
     executable: /bin/bash
-  when: inventory_hostname == master_ip
+  when: inventory_hostname == (master_ips | first)
