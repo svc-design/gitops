@@ -1,0 +1,8 @@
+# Default variables for gpu-k8s role
+sealos_version: v1.29.9
+cilium_version: v1.13.4
+helm_version: v3.9.4
+master_ip: "172.16.11.120"
+node_ip: "172.16.11.152"
+sealos_cmd_env: '{}'
+kubeadm_init_cmd: "kubeadm init --skip-phases=addon/kube-proxy"
