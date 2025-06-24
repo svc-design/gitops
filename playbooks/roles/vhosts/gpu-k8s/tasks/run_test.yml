@@ -11,3 +11,4 @@
   args:
     executable: /bin/bash
   when: inventory_hostname == (master_ips | first)
+
