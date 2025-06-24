@@ -1,4 +1,9 @@
 - hosts: all
   become: true
+  vars:
+    master_ips:
+      - "172.16.11.120"
+    node_ips:
+      - "172.16.11.152"
   roles:
     - gpu-k8s
