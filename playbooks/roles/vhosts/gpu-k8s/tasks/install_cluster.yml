@@ -1,0 +1,13 @@
+- name: Run sealos to create Kubernetes cluster
+  shell: |
+    sealos run \
+      registry.cn-shanghai.aliyuncs.com/labring/kubernetes:{{ sealos_version }} \
+      registry.cn-shanghai.aliyuncs.com/labring/cilium:{{ cilium_version }} \
+      registry.cn-shanghai.aliyuncs.com/labring/helm:{{ helm_version }} \
+      --masters {{ master_ip }} \
+      --nodes {{ node_ip }} \
+      --env '{{ sealos_cmd_env }}' \
+      --cmd "{{ kubeadm_init_cmd }}"
+  args:
+    executable: /bin/bash
+  when: inventory_hostname == master_ip
