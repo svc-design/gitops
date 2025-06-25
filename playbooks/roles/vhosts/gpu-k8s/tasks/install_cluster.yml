@@ -39,12 +39,18 @@
     executable: /bin/bash
   when: inventory_hostname == (ops_host | default(master_ips | first))
 
+- name: Determine LabRing registry prefix
+  shell: "{{ role_path }}/../../../../scripts/get_labring_registry.sh"
+  register: labring_registry
+  changed_when: false
+  when: inventory_hostname == (ops_host | default(master_ips | first))
+
 - name: Run sealos to create Kubernetes cluster
   shell: |
     sealos run \
-      registry.cn-shanghai.aliyuncs.com/labring/kubernetes:{{ sealos_version }} \
-      registry.cn-shanghai.aliyuncs.com/labring/cilium:{{ cilium_version }} \
-      registry.cn-shanghai.aliyuncs.com/labring/helm:{{ helm_version }} \
+      {{ labring_registry.stdout }}/kubernetes:{{ sealos_version }} \
+      {{ labring_registry.stdout }}/cilium:{{ cilium_version }} \
+      {{ labring_registry.stdout }}/helm:{{ helm_version }} \
       --masters {{ master_ips | join(',') }} \
       --nodes {{ node_ips | join(',') }} \
       --env '{{ sealos_cmd_env }}' \
