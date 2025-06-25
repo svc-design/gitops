@@ -2,6 +2,9 @@
 
 This repository contains a collection of Ansible playbooks and roles for various infrastructure setups and service management tasks.
 
+For a quick overview of the directory layout see [docs/repo-structure.md](docs/repo-structure.md).
+Additional documentation is stored under the `docs/` folder.
+
 ## Playbook 角色说明
 
 1. playbooks/roles/docker：适用于简单的、单机环境的部署，主要使用 Docker 和 Docker Compose 进行容器化管理。
@@ -88,3 +91,9 @@ ansible-playbook -i inventory/k3s-cluster playbooks/init_grafana_alloy -D -C -l 
 - Setup VPN gateway
 
 ansible-playbook -i inventory/hosts/all playbooks/common -l gateway -D
+
+## Documentation
+
+- [docs/gpu-k8s-role.md](docs/gpu-k8s-role.md) - How to run the GPU-enabled Kubernetes role.
+- [docs/repo-structure.md](docs/repo-structure.md) - Overview of repository layout.
+
