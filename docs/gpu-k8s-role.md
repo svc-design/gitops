@@ -18,10 +18,11 @@ fetches the most recent stable release from GitHub.
 The following command is used to create the cluster (example with one master and one worker):
 
 ```bash
+REGISTRY=$(scripts/get_labring_registry.sh)
 sealos run \
-  registry.cn-shanghai.aliyuncs.com/labring/kubernetes:<latest> \
-  registry.cn-shanghai.aliyuncs.com/labring/cilium:<cilium_version> \
-  registry.cn-shanghai.aliyuncs.com/labring/helm:<helm_version> \
+  ${REGISTRY}/kubernetes:<latest> \
+  ${REGISTRY}/cilium:<cilium_version> \
+  ${REGISTRY}/helm:<helm_version> \
   --masters 172.16.11.120 \
   --nodes 172.16.11.152 \
   --env '{}' \
