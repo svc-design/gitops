@@ -20,6 +20,10 @@
       {{ (node_ips | default([])) | length > 0
          | ternary(node_ips,
                    nodes | default([]) | map('extract', hostvars, 'ansible_host') | list) }}
+  delegate_to: "{{ ops_host | default(masters | default(master_ips) | first) }}"
+  delegate_facts: true
+  run_once: true
+  become: false
 
 
 - name: Install sealos CLI
