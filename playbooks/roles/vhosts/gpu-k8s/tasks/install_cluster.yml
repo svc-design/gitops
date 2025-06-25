@@ -43,6 +43,8 @@
   shell: "{{ role_path }}/../../../../scripts/get_labring_registry.sh"
   register: labring_registry
   changed_when: false
+  delegate_to: localhost
+  run_once: true
   when: inventory_hostname == (ops_host | default(master_ips | first))
 
 - name: Run sealos to create Kubernetes cluster
