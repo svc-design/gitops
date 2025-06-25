@@ -59,8 +59,26 @@ Example playbook snippet defining the IP lists:
     - gpu-k8s
 ```
 
-The playbook expects `master_ips` and `node_ips` variables which are lists of IP addresses. Up to
-three masters can be specified.
+You can also specify hostnames and let the role look up the IPs:
+
+```yaml
+- hosts: all
+  vars:
+    masters:
+      - "k8s-1"
+    nodes:
+      - "k8s-2"
+      - "k8s-3"
+  roles:
+    - ssh-trust
+    - gpu-k8s
+```
+
+The playbook expects at least one master and one node. You can provide the
+addresses directly via `master_ips` and `node_ips`, or give hostnames in the
+`masters` and `nodes` variables. When hostnames are used, the role will look up
+their `ansible_host` values from the inventory to obtain the IPs. Up to three
+masters can be specified.
 
 
 Run the playbook with your inventory that contains the master and node IP addresses.
