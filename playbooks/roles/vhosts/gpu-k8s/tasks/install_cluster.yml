@@ -42,7 +42,7 @@
 - name: Run sealos to create Kubernetes cluster
   shell: |
     sealos run \
-      registry.cn-shanghai.aliyuncs.com/labring/kubernetes:{{ sealos_version }} \
+      registry.cn-shanghai.aliyuncs.com/labring/kubernetes:{{ kubernetes_version }} \
       registry.cn-shanghai.aliyuncs.com/labring/cilium:{{ cilium_version }} \
       registry.cn-shanghai.aliyuncs.com/labring/helm:{{ helm_version }} \
       --masters {{ master_ips | join(',') }} \
