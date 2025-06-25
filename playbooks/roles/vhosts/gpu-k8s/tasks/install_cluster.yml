@@ -1,6 +1,40 @@
+- name: Determine latest sealos version when requested
+  uri:
+    url: https://api.github.com/repos/labring/sealos/releases/latest
+    return_content: yes
+  register: sealos_latest
+  when: sealos_version is not defined or sealos_version == 'latest'
+
+- name: Set sealos_version fact to latest release
+  set_fact:
+    sealos_version: "{{ (sealos_latest.content | from_json).tag_name }}"
+  when: sealos_version is not defined or sealos_version == 'latest'
+
 - name: Install sealos CLI
   shell: |
-    curl -sL https://raw.githubusercontent.com/labring/sealos/main/scripts/install.sh | bash -s {{ sealos_version }}
+    VERSION={{ sealos_version }}
+    wget -q https://github.com/labring/sealos/releases/download/${VERSION}/sealos_${VERSION#v}_linux_amd64.tar.gz
+    tar -xzf sealos_${VERSION#v}_linux_amd64.tar.gz sealos
+    chmod +x sealos
+    mv sealos /usr/bin/sealos
+  args:
+    executable: /bin/bash
+  when: inventory_hostname == (ops_host | default(master_ips | first))
+
+- name: Install Helm
+  shell: |
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+    rm -f get_helm.sh
+  args:
+    executable: /bin/bash
+  when: inventory_hostname == (ops_host | default(master_ips | first)) and (ansible_facts['distribution'] == 'Ubuntu' or ansible_facts['distribution'] == 'Debian')
+
+- name: Install nerdctl
+  shell: |
+    wget -q https://github.com/containerd/nerdctl/releases/download/v2.0.2/nerdctl-2.0.2-linux-amd64.tar.gz
+    tar -C /usr/local -xzf nerdctl-2.0.2-linux-amd64.tar.gz
   args:
     executable: /bin/bash
   when: inventory_hostname == (ops_host | default(master_ips | first))
