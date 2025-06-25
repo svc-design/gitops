@@ -1,10 +1,12 @@
 - hosts: all
   become: true
   vars:
-    ops_host: "172.16.11.120"
-    master_ips:
-      - "172.16.11.120"
-    node_ips:
-      - "172.16.11.152"
+    ops_host: "127.0.0.1"
+    masters:
+      - "k8s-1"
+    nodes:
+      - "k8s-2"
+      - "k8s-3"
   roles:
-    - gpu-k8s
+    - roles/vhosts/gpu-k8s/
+    - roles/vhosts/common/
