@@ -1,5 +1,6 @@
 # Default variables for gpu-k8s role
 sealos_version: latest
+kubernetes_version: v1.25.16
 cilium_version: v1.13.4
 helm_version: v3.9.4
 master_ips: []  # List of up to three master node IPs

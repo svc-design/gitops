@@ -12,14 +12,16 @@ The role performs four main tasks:
 4. **Verify GPU access** by deploying the official NVIDIA device plugin and running a small CUDA workload.
 
 When `sealos_version` is set to `latest` (the default), the role automatically
-fetches the most recent stable release from GitHub.
+fetches the most recent stable release from GitHub. The Kubernetes image tag is
+controlled separately via `kubernetes_version`, which defaults to `v1.25.16` but
+can be overridden to any compatible release.
 
 
 The following command is used to create the cluster (example with one master and one worker):
 
 ```bash
 sealos run \
-  registry.cn-shanghai.aliyuncs.com/labring/kubernetes:<latest> \
+  registry.cn-shanghai.aliyuncs.com/labring/kubernetes:<kubernetes_version> \
   registry.cn-shanghai.aliyuncs.com/labring/cilium:<cilium_version> \
   registry.cn-shanghai.aliyuncs.com/labring/helm:<helm_version> \
   --masters 172.16.11.120 \
