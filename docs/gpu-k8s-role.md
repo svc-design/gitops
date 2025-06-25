@@ -20,7 +20,7 @@ can be overridden to any compatible release.
 The following command is used to create the cluster (example with one master and one worker):
 
 ```bash
-REGISTRY=$(scripts/get_labring_registry.sh)
+REGISTRY=$(playbooks/roles/vhosts/gpu-k8s/files/get_labring_registry.sh)
 sealos run \
   ${REGISTRY}/kubernetes:<kubernetes_version> \
   ${REGISTRY}/cilium:<cilium_version> \

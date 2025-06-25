@@ -40,11 +40,12 @@
   when: inventory_hostname == (ops_host | default(master_ips | first))
 
 - name: Determine LabRing registry prefix
-  shell: "{{ role_path }}/../../../../scripts/get_labring_registry.sh"
+  shell: "{{ role_path }}/files/get_labring_registry.sh"
   register: labring_registry
   changed_when: false
   delegate_to: localhost
   run_once: true
+  become: false
   when: inventory_hostname == (ops_host | default(master_ips | first))
 
 - name: Run sealos to create Kubernetes cluster
