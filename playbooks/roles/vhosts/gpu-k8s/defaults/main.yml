@@ -1,5 +1,5 @@
 # Default variables for gpu-k8s role
-sealos_version: v1.29.9
+sealos_version: latest
 cilium_version: v1.13.4
 helm_version: v3.9.4
 master_ips: []  # List of up to three master node IPs

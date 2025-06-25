@@ -11,14 +11,17 @@ The role performs four main tasks:
 3. **Verify the cluster state** after initialization, displaying the `sealos` version and the current Kubernetes nodes.
 4. **Verify GPU access** by deploying the official NVIDIA device plugin and running a small CUDA workload.
 
+When `sealos_version` is set to `latest` (the default), the role automatically
+fetches the most recent stable release from GitHub.
+
 
 The following command is used to create the cluster (example with one master and one worker):
 
 ```bash
 sealos run \
-  registry.cn-shanghai.aliyuncs.com/labring/kubernetes:v1.29.9 \
-  registry.cn-shanghai.aliyuncs.com/labring/cilium:v1.13.4 \
-  registry.cn-shanghai.aliyuncs.com/labring/helm:v3.9.4 \
+  registry.cn-shanghai.aliyuncs.com/labring/kubernetes:<latest> \
+  registry.cn-shanghai.aliyuncs.com/labring/cilium:<cilium_version> \
+  registry.cn-shanghai.aliyuncs.com/labring/helm:<helm_version> \
   --masters 172.16.11.120 \
   --nodes 172.16.11.152 \
   --env '{}' \
