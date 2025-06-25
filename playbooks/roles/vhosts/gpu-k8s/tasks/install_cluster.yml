@@ -18,3 +18,22 @@
   args:
     executable: /bin/bash
   when: inventory_hostname == (ops_host | default(master_ips | first))
+
+- name: Show sealos CLI version
+  command: sealos version
+  register: sealos_cli_version
+  changed_when: false
+  when: inventory_hostname == (ops_host | default(master_ips | first))
+
+- name: Display Kubernetes cluster status
+  shell: kubectl get nodes -o wide
+  args:
+    executable: /bin/bash
+  register: k8s_status
+  changed_when: false
+  when: inventory_hostname == (ops_host | default(master_ips | first))
+
+- name: Print cluster nodes
+  debug:
+    msg: "{{ k8s_status.stdout }}"
+  when: k8s_status is defined and inventory_hostname == (ops_host | default(master_ips | first))
