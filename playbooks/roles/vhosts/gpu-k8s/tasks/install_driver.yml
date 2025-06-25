@@ -8,6 +8,7 @@
   args:
     executable: /bin/bash
   become: true
+  when: not ansible_check_mode
 
 - name: Install NVIDIA driver and container runtime
   apt:
@@ -19,3 +20,4 @@
     state: present
     update_cache: yes
   become: true
+  when: not ansible_check_mode
