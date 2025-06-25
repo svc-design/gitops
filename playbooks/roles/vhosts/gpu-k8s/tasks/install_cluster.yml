@@ -13,13 +13,13 @@
 - name: Resolve master and node IPs from hostnames when needed
   set_fact:
     master_ips: >-
-      {{ (master_ips | default([])) | length > 0
+      {{ ((master_ips | default([])) | length > 0)
          | ternary(master_ips,
-                   masters | default([]) | map('extract', hostvars, 'ansible_host') | list) }}
+                   (masters | default([]) | map('extract', hostvars, 'ansible_host') | list)) }}
     node_ips: >-
-      {{ (node_ips | default([])) | length > 0
+      {{ ((node_ips | default([])) | length > 0)
          | ternary(node_ips,
-                   nodes | default([]) | map('extract', hostvars, 'ansible_host') | list) }}
+                   (nodes | default([]) | map('extract', hostvars, 'ansible_host') | list)) }}
   delegate_to: "{{ ops_host | default(masters | default(master_ips) | first) }}"
   delegate_facts: true
   run_once: true
