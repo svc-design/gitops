@@ -51,6 +51,7 @@ Additional documentation is stored under the `docs/` folder.
 | `k3s-addon`             | 用于安装 Kubernetes 集群插件。                          |        |        |   ✔    |         |          |              |
 | `secret-manger`         | 密钥管理角色，用于管理密钥。                            |        |        |   ✔    |         |          |              |
 | `cert-manager`          | 证书管理角色，用于管理证书。                            |        |        |   ✔    |         |          |              |
+| `ssh-trust`             | 配置 ops 主机与节点的 SSH 互信。    |        |        |   ✔    |         |          |              |
 
 表格说明
 - Docker：是否属于 Docker 角色。
