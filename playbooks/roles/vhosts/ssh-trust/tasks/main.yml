@@ -13,8 +13,7 @@
   delegate_to: "{{ ops_host }}"
   run_once: true
 
-- name: Authorize ops host key on other nodes
+- name: Authorize ops host key on cluster hosts
   ansible.builtin.authorized_key:
     user: "{{ ansible_user | default('root') }}"
     key: "{{ ops_pub_key.content | b64decode }}"
-  when: inventory_hostname != ops_host
