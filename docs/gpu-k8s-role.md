@@ -7,7 +7,7 @@ This document describes how to use the `gpu-k8s` role to deploy a simple Kuberne
 The role performs three main tasks:
 
 1. **Create the Kubernetes cluster** using [sealos](https://github.com/labring/sealos). It runs the provided `sealos run` command to bootstrap the master and worker nodes.
-2. **Install NVIDIA drivers and container runtime** on the target hosts so that Kubernetes can access GPU resources.
+2. **Install NVIDIA drivers and the NVIDIA container toolkit** on the target hosts so that Kubernetes can access GPU resources.
 3. **Verify GPU access** by deploying the official NVIDIA device plugin and running a small CUDA workload.
 
 
