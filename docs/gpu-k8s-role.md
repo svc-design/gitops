@@ -30,8 +30,8 @@ sealos run \
   --env '{}' \
   --cmd "kubeadm init --skip-phases=addon/kube-proxy"
 ```
-If deploying with a non-root user the command also requires `--ssh-user` and
-`--ssh-private-key` options pointing to the user's key.
+If deploying with a non-root user the command also requires `--user` and
+`--pk` options pointing to the user's SSH key.
 
 After the cluster is running the role installs the NVIDIA device plugin and runs a test pod to ensure `nvidia-smi` works inside the cluster.
 
