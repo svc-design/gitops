@@ -10,3 +10,4 @@ node_ips: []    # List of worker node IPs
 sealos_cmd_env: '{}'
 kubeadm_init_cmd: "kubeadm init --skip-phases=addon/kube-proxy"
 ssh_user: "{{ ansible_user | default('root') }}"
+ssh_private_key: "{{ ansible_ssh_private_key_file | default('~/.ssh/id_rsa') }}"

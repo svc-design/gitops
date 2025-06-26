@@ -35,6 +35,7 @@
     mv sealos /usr/bin/sealos
   args:
     executable: /bin/bash
+  become: true
   when: inventory_hostname == (ops_host | default(masters | default(master_ips) | first))
 
 - name: Install Helm
@@ -45,6 +46,7 @@
     rm -f get_helm.sh
   args:
     executable: /bin/bash
+  become: true
   when: inventory_hostname == (ops_host | default(masters | default(master_ips) | first)) and (ansible_facts['distribution'] == 'Ubuntu' or ansible_facts['distribution'] == 'Debian')
 
 - name: Install nerdctl
@@ -53,6 +55,7 @@
     tar -C /usr/local -xzf nerdctl-2.0.2-linux-amd64.tar.gz
   args:
     executable: /bin/bash
+  become: true
   when: inventory_hostname == (ops_host | default(masters | default(master_ips) | first))
 
 - name: Determine LabRing registry prefix
@@ -75,7 +78,7 @@
 - name: Verify passwordless SSH access to all cluster nodes
   shell: >-
     ssh -o BatchMode=yes -o StrictHostKeyChecking=no \
-    -i {{ ansible_ssh_private_key_file | default('~/.ssh/id_rsa') }} \
+    -i {{ ssh_private_key }} \
     {{ ssh_user | default(ansible_ssh_user | default(ansible_user, true) | default('root')) }}@{{ item }} hostname
   loop: "{{ master_ips + node_ips }}"
   delegate_to: "{{ ops_host | default(masters | default(master_ips) | first) }}"
@@ -92,16 +95,20 @@
       {{ labring_registry.stdout }}/helm:{{ helm_version }} \
       --masters {{ master_ips | join(',') }} \
       --nodes {{ node_ips | join(',') }} \
+      --ssh-user {{ ssh_user }} \
+      --ssh-private-key {{ ssh_private_key }} \
       --env '{{ sealos_cmd_env }}' \
       --cmd "{{ kubeadm_init_cmd }}"
   args:
     executable: /bin/bash
+  become: true
   when: inventory_hostname == (ops_host | default(masters | default(master_ips) | first))
 
 - name: Show sealos CLI version
   command: sealos version
   register: sealos_cli_version
   changed_when: false
+  become: true
   when: inventory_hostname == (ops_host | default(masters | default(master_ips) | first))
 
 - name: Display Kubernetes cluster status
@@ -110,6 +117,7 @@
     executable: /bin/bash
   register: k8s_status
   changed_when: false
+  become: true
   when: inventory_hostname == (ops_host | default(masters | default(master_ips) | first))
 
 - name: Print cluster nodes
