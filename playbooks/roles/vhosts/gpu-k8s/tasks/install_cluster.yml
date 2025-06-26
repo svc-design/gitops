@@ -90,9 +90,9 @@
 - name: Run sealos to create Kubernetes cluster
   shell: |
     sudo sealos run \
-      {{ labring_registry.stdout }}/kubernetes:{{ kubernetes_version }} \
-      {{ labring_registry.stdout }}/cilium:{{ cilium_version }} \
-      {{ labring_registry.stdout }}/helm:{{ helm_version }} \
+      {{ labring_registry.stdout | trim }}/kubernetes:{{ kubernetes_version }} \
+      {{ labring_registry.stdout | trim }}/cilium:{{ cilium_version }} \
+      {{ labring_registry.stdout | trim }}/helm:{{ helm_version }} \
       --masters {{ master_ips | join(',') }} \
       --nodes {{ node_ips | join(',') }} \
       --user {{ ssh_user }} \
