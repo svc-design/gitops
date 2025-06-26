@@ -78,8 +78,8 @@
 - name: Verify passwordless SSH access to all cluster nodes
   shell: >-
     ssh -o BatchMode=yes -o StrictHostKeyChecking=no \
-    -i {{ ansible_ssh_private_key_file | default('~/.ssh/id_rsa') }} \
-    root@{{ item }} hostname
+    -i {{ ssh_private_key }} \
+    {{ (root_mode | ternary('root', ssh_user | default(ansible_ssh_user | default(ansible_user, true) | default('root')))) }}@{{ item }} hostname
   loop: "{{ master_ips + node_ips }}"
   delegate_to: "{{ ops_host | default(masters | default(master_ips) | first) }}"
   become: false
@@ -95,6 +95,10 @@
       {{ labring_registry.stdout }}/helm:{{ helm_version }} \
       --masters {{ master_ips | join(',') }} \
       --nodes {{ node_ips | join(',') }} \
+{% if not root_mode %}
+      --user {{ ssh_user }} \
+      --pk {{ ssh_private_key }} \
+{% endif %}
       --env '{{ sealos_cmd_env }}' \
       --cmd "{{ kubeadm_init_cmd }}"
   args:
