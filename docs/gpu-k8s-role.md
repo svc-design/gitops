@@ -30,17 +30,25 @@ sealos run \
   --env '{}' \
   --cmd "kubeadm init --skip-phases=addon/kube-proxy"
 ```
+
+By default the role runs the command as root. Set `root_mode` to `false` to
+deploy in rootless mode, which adds `--user` and `--pk` options pointing to the
+SSH key for `ssh_user`. In rootless mode the host running Sealos must have
+`newuidmap` and `newgidmap` installed (typically provided by the `uidmap`
+package) along with the `fuse-overlayfs` binary to enable user namespaces.
+
 If deploying with a non-root user the command also requires `--user` and
 `--pk` options pointing to the user's SSH key. The host running Sealos must have
 `newuidmap` and `newgidmap` installed (typically provided by the `uidmap` package) 
 along with the `fuse-overlayfs` binary to enable user namespaces.
 
 
+
 After the cluster is running the role installs the NVIDIA device plugin and runs a test pod to ensure `nvidia-smi` works inside the cluster.
 
 ## Usage
 
-Add the role to your playbook along with the `ssh-trust` role which configures passwordless access from the ops host to the cluster nodes:
+Add the role to your playbook along with the `ssh-trust` role which configures passwordless access from the ops host to the cluster nodes. The `gpu-k8s` role automatically pulls in the `common` role so you do not need to list it separately:
 
 ```yaml
 - hosts: all
@@ -66,6 +74,9 @@ specify the private key path via `ssh_private_key`:
 
 The specified user must be able to log in without a password and have sudo
 access on the target hosts.
+
+Set `root_mode` to `false` if you want the playbook to operate as this user
+instead of root, enabling rootless deployment of the cluster.
 
 
 Example playbook snippet defining the IP lists:
