@@ -32,7 +32,7 @@ sealos run \
 ```
 If deploying with a non-root user the command also requires `--user` and
 `--pk` options pointing to the user's SSH key. The host running Sealos must have
-`newuidmap` and `newgidmap` installed (typically provided by the `uidmap` package) 
+Add the role to your playbook along with the `ssh-trust` role which configures passwordless access from the ops host to the cluster nodes. The `gpu-k8s` role automatically pulls in the `common` role so you do not need to list it separately:
 along with the `fuse-overlayfs` binary to enable user namespaces.
 
 
