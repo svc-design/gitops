@@ -88,17 +88,17 @@
   run_once: true
 
 - name: Run sealos to create Kubernetes cluster
-  shell: |
-    sudo sealos run \
-      {{ labring_registry.stdout | trim }}/kubernetes:{{ kubernetes_version }} \
-      {{ labring_registry.stdout | trim }}/cilium:{{ cilium_version }} \
-      {{ labring_registry.stdout | trim }}/helm:{{ helm_version }} \
-      --masters {{ master_ips | join(',') }} \
-      --nodes {{ node_ips | join(',') }} \
-      --user {{ ssh_user }} \
-      --pk /home/{{ ansible_user }}/.ssh/id_rsa \
-      --env '{{ sealos_cmd_env }}' \
-      --cmd "{{ kubeadm_init_cmd }}"
+  script: files/run_sealos.sh \
+    {{ labring_registry.stdout | trim }} \
+    {{ kubernetes_version }} \
+    {{ cilium_version }} \
+    {{ helm_version }} \
+    "{{ master_ips | join(',') }}" \
+    "{{ node_ips | join(',') }}" \
+    {{ ssh_user }} \
+    {{ ansible_user }} \
+    "{{ sealos_cmd_env | b64encode }}" \
+    "{{ kubeadm_init_cmd | b64encode }}"
   args:
     executable: /bin/bash
   become: true
