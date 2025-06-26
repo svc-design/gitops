@@ -95,8 +95,8 @@
       {{ labring_registry.stdout }}/helm:{{ helm_version }} \
       --masters {{ master_ips | join(',') }} \
       --nodes {{ node_ips | join(',') }} \
-      --ssh-user {{ ssh_user }} \
-      --ssh-private-key {{ ssh_private_key }} \
+      --user {{ ssh_user }} \
+      --pk {{ ssh_private_key }} \
       --env '{{ sealos_cmd_env }}' \
       --cmd "{{ kubeadm_init_cmd }}"
   args:
