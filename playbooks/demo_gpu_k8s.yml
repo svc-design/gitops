@@ -10,6 +10,6 @@
       - "k8s-2"
       - "k8s-3"
   roles:
+    - roles/vhosts/common/
     - roles/vhosts/ssh-trust/
     - roles/vhosts/gpu-k8s/
-    - roles/vhosts/common/
