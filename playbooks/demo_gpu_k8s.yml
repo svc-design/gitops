@@ -12,4 +12,3 @@
   roles:
     - roles/vhosts/ssh-trust/
     - roles/vhosts/gpu-k8s/
-    - roles/vhosts/common/
