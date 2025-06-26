@@ -2,6 +2,7 @@
   shell: kubectl apply -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.14.5/nvidia-device-plugin.yml
   args:
     executable: /bin/bash
+  become: true
   when: master_ips|length > 0 and inventory_hostname == (ops_host | default(masters | default(master_ips) | first))
 
 - name: Run CUDA validation pod
@@ -10,5 +11,6 @@
     kubectl delete pod gpu-test --wait
   args:
     executable: /bin/bash
+  become: true
   when: master_ips|length > 0 and inventory_hostname == (ops_host | default(masters | default(master_ips) | first))
 
