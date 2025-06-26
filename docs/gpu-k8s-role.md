@@ -44,6 +44,18 @@ Add the role to your playbook along with the `ssh-trust` role which configures p
     - gpu-k8s
 ```
 
+By default the SSH key is created for the same user Ansible connects with. You
+can override this by setting `ssh_user`:
+
+```yaml
+- hosts: all
+  vars:
+    ssh_user: ubuntu
+  roles:
+    - ssh-trust
+    - gpu-k8s
+```
+
 
 Example playbook snippet defining the IP lists:
 
