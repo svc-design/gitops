@@ -6,7 +6,7 @@
   delegate_to: "{{ ops_host }}"
   run_once: true
   become: true
-  become_user: "{{ ssh_user }}"
+  become_user: root
 
 - name: Fetch ops host public key
   slurp:
@@ -15,9 +15,9 @@
   delegate_to: "{{ ops_host }}"
   run_once: true
   become: true
-  become_user: "{{ ssh_user }}"
+  become_user: root
 
 - name: Authorize ops host key on cluster hosts
   ansible.builtin.authorized_key:
-    user: "{{ ssh_user }}"
+    user: root
     key: "{{ ops_pub_key.content | b64decode }}"

@@ -30,14 +30,13 @@ sealos run \
   --env '{}' \
   --cmd "kubeadm init --skip-phases=addon/kube-proxy"
 ```
-If deploying with a non-root user the command also requires `--user` and
-`--pk` options pointing to the user's SSH key.
+
 
 After the cluster is running the role installs the NVIDIA device plugin and runs a test pod to ensure `nvidia-smi` works inside the cluster.
 
 ## Usage
 
-Add the role to your playbook along with the `ssh-trust` role which configures passwordless access from the ops host to the cluster nodes:
+Add the role to your playbook along with the `ssh-trust` role which configures passwordless access from the ops host to the cluster nodes. The `gpu-k8s` role automatically pulls in the `common` role so you do not need to list it separately:
 
 ```yaml
 - hosts: all
@@ -46,23 +45,7 @@ Add the role to your playbook along with the `ssh-trust` role which configures p
     - gpu-k8s
 ```
 
-By default the SSH key is created for the same user Ansible connects with. You
-can override this by setting `ssh_user`. When `ansible_user` is defined it will
-be used automatically, otherwise `root` is assumed. The role also allows you to
-specify the private key path via `ssh_private_key`:
 
-```yaml
-- hosts: all
-  vars:
-    ssh_user: ubuntu
-    ssh_private_key: /home/ubuntu/.ssh/myuser_id_rsa
-  roles:
-    - ssh-trust
-    - gpu-k8s
-```
-
-The specified user must be able to log in without a password and have sudo
-access on the target hosts.
 
 
 Example playbook snippet defining the IP lists:
