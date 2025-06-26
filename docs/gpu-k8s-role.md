@@ -31,7 +31,9 @@ sealos run \
   --cmd "kubeadm init --skip-phases=addon/kube-proxy"
 ```
 If deploying with a non-root user the command also requires `--user` and
-`--pk` options pointing to the user's SSH key.
+`--pk` options pointing to the user's SSH key. The host running Sealos must have
+`newuidmap` and `newgidmap` installed (typically provided by the `uidmap`
+package) along with the `fuse-overlayfs` binary to enable user namespaces.
 
 After the cluster is running the role installs the NVIDIA device plugin and runs a test pod to ensure `nvidia-smi` works inside the cluster.
 
