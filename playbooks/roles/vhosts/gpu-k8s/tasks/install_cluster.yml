@@ -7,8 +7,11 @@
 
 - name: Set sealos_version fact to latest release
   set_fact:
-    sealos_version: "{{ (sealos_latest.content | from_json).tag_name }}"
-  when: sealos_version is not defined or sealos_version == 'latest'
+    sealos_version: "{{ sealos_latest.json.tag_name }}"
+  when:
+    - sealos_version is not defined or sealos_version == 'latest'
+    - sealos_latest is defined
+    - sealos_latest.json is defined
 
 - name: Resolve master and node IPs from hostnames when needed
   set_fact:
