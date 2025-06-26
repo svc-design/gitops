@@ -30,11 +30,19 @@ sealos run \
   --env '{}' \
   --cmd "kubeadm init --skip-phases=addon/kube-proxy"
 ```
+<<<<<<< m3ne5z-codex/检查目标机器ssh登录配置并修复sealos问题
 By default the role runs the command as root. Set `root_mode` to `false` to
 deploy in rootless mode, which adds `--user` and `--pk` options pointing to the
 SSH key for `ssh_user`. In rootless mode the host running Sealos must have
 `newuidmap` and `newgidmap` installed (typically provided by the `uidmap`
 package) along with the `fuse-overlayfs` binary to enable user namespaces.
+=======
+If deploying with a non-root user the command also requires `--user` and
+`--pk` options pointing to the user's SSH key. The host running Sealos must have
+`newuidmap` and `newgidmap` installed (typically provided by the `uidmap` package) 
+along with the `fuse-overlayfs` binary to enable user namespaces.
+
+>>>>>>> main
 
 After the cluster is running the role installs the NVIDIA device plugin and runs a test pod to ensure `nvidia-smi` works inside the cluster.
 
