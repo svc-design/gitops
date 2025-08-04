@@ -1,0 +1,6 @@
+vhosts_nginx_cn_homepage_domain: cn-homepage.svc.plus
+vhosts_nginx_artifact_domain: artifact.svc.plus
+vhosts_nginx_ssl_certificate: /etc/ssl/svc.plus.pem
+vhosts_nginx_ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+vhosts_nginx_cn_homepage_root: /var/www/XControl/ui/homepage/out
+vhosts_nginx_artifact_root: /data/update-server
