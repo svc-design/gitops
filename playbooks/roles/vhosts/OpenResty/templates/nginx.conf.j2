@@ -1,0 +1,56 @@
+worker_processes auto;
+events { worker_connections 1024; }
+
+http {
+    lua_shared_dict limit_cache 10m;
+
+    server {
+        listen 80;
+        server_name localhost;
+
+        location /api/askai {
+            access_by_lua_block {
+                local redis = require "resty.redis"
+                local r = redis:new()
+                r:set_timeout(200)
+
+                -- 连接 Redis
+                local ok, err = r:connect("127.0.0.1", 6379)
+                if not ok then
+                    ngx.log(ngx.ERR, "failed to connect to redis: ", err)
+                    return ngx.exit(500)
+                end
+
+                -- 用户标识（优先 token 参数，否则用 IP）
+                local user = ngx.var.arg_user or ngx.var.remote_addr
+                local today = os.date("%Y%m%d")
+                local user_key = "limit:user:" .. user .. ":" .. today
+                local global_key = "limit:global:" .. today
+
+                -- 用户限额 200
+                local current, err = r:incr(user_key)
+                if current == 1 then
+                    r:expire(user_key, 86400)
+                end
+                if current > 200 then
+                    ngx.status = 429
+                    ngx.say("Too Many Requests: user limit reached")
+                    return ngx.exit(429)
+                end
+
+                -- 全局限额 20000
+                local gcount, err = r:incr(global_key)
+                if gcount == 1 then
+                    r:expire(global_key, 86400)
+                end
+                if gcount > 20000 then
+                    ngx.status = 429
+                    ngx.say("Too Many Requests: global limit reached")
+                    return ngx.exit(429)
+                end
+            }
+
+            proxy_pass http://127.0.0.1:5000;
+        }
+    }
+}
