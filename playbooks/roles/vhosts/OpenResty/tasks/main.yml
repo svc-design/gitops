@@ -1,0 +1,28 @@
+- name: Install prerequisites for OpenResty
+  apt:
+    name: software-properties-common
+    state: present
+    update_cache: yes
+
+- name: Add OpenResty apt repository
+  apt_repository:
+    repo: ppa:openresty/ppa
+    state: present
+
+- name: Install OpenResty
+  apt:
+    name: openresty
+    state: present
+    update_cache: yes
+
+- name: Deploy nginx configuration
+  template:
+    src: nginx.conf.j2
+    dest: /usr/local/openresty/nginx/conf/nginx.conf
+  notify: Restart OpenResty
+
+- name: Enable and start OpenResty
+  systemd:
+    name: openresty
+    enabled: yes
+    state: started
