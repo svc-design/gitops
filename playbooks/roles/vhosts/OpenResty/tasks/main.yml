@@ -36,3 +36,13 @@
     name: openresty
     enabled: yes
     state: started
+
+- name: Verify OpenResty core API
+  shell: |
+    curl -fsS -X POST http://127.0.0.1:8080/api/askai \
+      -H "Content-Type: application/json" \
+      -d '{"question":"你好"}'
+  register: openresty_verify
+  retries: 5
+  delay: 3
+  until: openresty_verify.rc == 0
