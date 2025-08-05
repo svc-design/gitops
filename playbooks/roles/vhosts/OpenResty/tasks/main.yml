@@ -39,7 +39,7 @@
 
 - name: Verify OpenResty core API
   shell: |
-    curl -fsS -X POST http://127.0.0.1:8080/api/askai \
+    curl -fsS -X POST http://127.0.0.1/api/askai \
       -H "Content-Type: application/json" \
       -d '{"question":"你好"}'
   register: openresty_verify
