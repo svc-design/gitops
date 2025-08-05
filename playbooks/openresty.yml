@@ -1,15 +1,33 @@
-- hosts: all
+---
+- name: setup OpenResty server
+  hosts: icp-aliyun
   become: true
   vars:
-    # Use the inventory hostname for delegation so Ansible
-    # applies the correct connection variables
-    ops_host: "k8s-1"
-    masters:
-      - "k8s-1"
-    nodes:
-      - "k8s-2"
-      - "k8s-3"
+    domain:
+      - name: cn-homepage.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+      - name: cn-artifact.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
   roles:
     - roles/vhosts/common/
     - roles/vhosts/ssh-trust/
     - roles/vhosts/OpenResty/
+---
+- name: setup OpenResty server
+  hosts: global-hub
+  become: true
+  vars:
+    domain:
+      - name: global-homepage.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+      - name: global-artifact.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+  roles:
+    - roles/vhosts/common/
+    - roles/vhosts/ssh-trust/
+    - roles/vhosts/OpenResty/
+
