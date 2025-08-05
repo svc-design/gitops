@@ -1,12 +1,22 @@
 - name: Install prerequisites for OpenResty
   apt:
-    name: software-properties-common
+    name:
+      - curl
+      - gnupg
+      - apt-transport-https
     state: present
     update_cache: yes
 
+- name: Import OpenResty GPG key
+  command: >-
+    bash -c 'curl -fsSL https://openresty.org/package/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/openresty.gpg'
+  args:
+    creates: /usr/share/keyrings/openresty.gpg
+
 - name: Add OpenResty apt repository
   apt_repository:
-    repo: ppa:openresty/ppa
+    repo: "deb [signed-by=/usr/share/keyrings/openresty.gpg] http://openresty.org/package/ubuntu jammy main"
+    filename: openresty
     state: present
 
 - name: Install OpenResty
