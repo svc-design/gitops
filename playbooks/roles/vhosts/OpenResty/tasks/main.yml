@@ -25,10 +25,22 @@
     state: present
     update_cache: yes
 
+- name: Ensure sites-available directory exists
+  file:
+    path: /usr/local/openresty/nginx/conf/sites-available
+    state: directory
+
 - name: Deploy nginx configuration
   template:
     src: nginx.conf.j2
     dest: /usr/local/openresty/nginx/conf/nginx.conf
+  notify: Restart OpenResty
+
+- name: Deploy vhost configurations
+  template:
+    src: site.conf.j2
+    dest: "/usr/local/openresty/nginx/conf/sites-available/{{ item.name }}.conf"
+  loop: "{{ vhosts_openresty_vhosts | default([]) }}"
   notify: Restart OpenResty
 
 - name: Enable and start OpenResty
