@@ -1,6 +1,5 @@
----
 - name: setup OpenResty server
-  hosts: icp-aliyun
+  hosts: cn-homepage.svc.plus
   become: true
   vars:
     domain:
@@ -12,11 +11,9 @@
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
   roles:
     - roles/vhosts/common/
-    - roles/vhosts/ssh-trust/
     - roles/vhosts/OpenResty/
----
 - name: setup OpenResty server
-  hosts: global-hub
+  hosts: global-homepage.svc.plus
   become: true
   vars:
     domain:
@@ -28,6 +25,4 @@
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
   roles:
     - roles/vhosts/common/
-    - roles/vhosts/ssh-trust/
     - roles/vhosts/OpenResty/
-
