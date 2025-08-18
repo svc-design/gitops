@@ -46,18 +46,11 @@
     mode: "0755"
 
 # yamllint disable rule:line-length
-- name: Download GeoLite2 Country database
+- name: Download V2Fly GeoIP database
   get_url:
-    url: https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz
-    dest: /usr/share/GeoIP/GeoLite2-Country.mmdb.gz
+    url: https://github.com/v2fly/geoip/releases/latest/download/geoip.dat
+    dest: /usr/share/GeoIP/geoip.dat
 # yamllint enable rule:line-length
-
-- name: Decompress GeoLite2 Country database
-  unarchive:
-    src: /usr/share/GeoIP/GeoLite2-Country.mmdb.gz
-    dest: /usr/share/GeoIP/
-    remote_src: true
-    creates: /usr/share/GeoIP/GeoLite2-Country.mmdb
 
 - name: Ensure sites-available directory exists
   file:
