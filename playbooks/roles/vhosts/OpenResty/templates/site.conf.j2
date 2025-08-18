@@ -30,7 +30,7 @@ server {
     try_files $uri =404;
   }
 
-  location ~ /\\. {
+  location ~ /\. {
     deny all;
   }
 }
@@ -110,14 +110,14 @@ server {
   }
 
   # 静态资源缓存
-  location ~* \\.(?:ico|css|js|gif|jpe?g|png|woff2?)$ {
+  location ~* \.(?:ico|css|js|gif|jpe?g|png|woff2?)$ {
     expires 30d;
     access_log off;
     add_header Cache-Control "public";
   }
 
   # 隐藏 . 文件
-  location ~ /\\. {
+  location ~ /\. {
     deny all;
   }
 }
