@@ -1,63 +1,26 @@
+{% set name = item.name %}
 lua_package_path "/usr/local/openresty/lualib/?.lua;;";
 
-{% for sub in item.subdomains %}
-{% if sub.type == 'artifact' %}
-# {{ sub.server_name }} 文件下载服务
-server {
-  listen 443 ssl http2;
-  server_name {{ sub.server_name }};
-
-  ssl_certificate {{ sub.ssl_certificate }};
-  ssl_certificate_key {{ sub.ssl_certificate_key }};
-  ssl_protocols TLSv1.2 TLSv1.3;
-  ssl_ciphers HIGH:!aNULL:!MD5;
-
-  root {{ sub.root }};
-  index index.html;
-
-  autoindex on;
-  autoindex_exact_size off;
-  autoindex_localtime on;
-
-  location / {
-    add_header Accept-Ranges bytes;
-    try_files $uri $uri/ =404;
-  }
-
-  location ~* \.(dmg|zip|tar\.gz|deb|rpm|exe|pkg|AppImage|apk|ipa)$ {
-    expires 7d;
-    access_log off;
-    add_header Cache-Control "public";
-    add_header Accept-Ranges bytes;
-    try_files $uri =404;
-  }
-
-  location ~ /\. {
-    deny all;
-  }
-}
-{% else %}
 # HTTP → HTTPS
 server {
   listen 80;
-  server_name {{ sub.server_name }};
-  return 301 https://{{ sub.server_name }}$request_uri;
+  server_name {{ name }};
+  return 301 https://{{ name }}$request_uri;
 }
 
 # 主站服务
 server {
   listen 443 ssl http2;
-  server_name {{ sub.server_name }};
+  server_name {{ name }};
 
-  ssl_certificate {{ sub.ssl_certificate }};
-  ssl_certificate_key {{ sub.ssl_certificate_key }};
+  ssl_certificate {{ item.ssl_certificate }};
+  ssl_certificate_key {{ item.ssl_certificate_key }};
   ssl_protocols TLSv1.2 TLSv1.3;
   ssl_ciphers HIGH:!aNULL:!MD5;
 
-  root {{ sub.root }};
+  root /var/www/XControl/ui/homepage/out;
   index index.html;
 
-  {% if sub.askai_backend is defined %}
   # /api/askai 限流：每用户每日 200 次
   location = /api/askai {
     access_by_lua_block {
@@ -86,26 +49,23 @@ server {
         end
     }
 
-    proxy_pass {{ sub.askai_backend }};
+    proxy_pass http://127.0.0.1:8080;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
   }
-  {% endif %}
 
-  {% if sub.api_backend is defined %}
   # 其他 API
   location /api/ {
-    proxy_pass {{ sub.api_backend }};
+    proxy_pass http://127.0.0.1:8080;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
   }
-  {% endif %}
 
   # SPA fallback
   location / {
@@ -124,5 +84,3 @@ server {
     deny all;
   }
 }
-{% endif %}
-{% endfor %}
