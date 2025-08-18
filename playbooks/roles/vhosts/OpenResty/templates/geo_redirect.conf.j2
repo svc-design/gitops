@@ -17,7 +17,7 @@ server {
       end
 
       local geoip = require("resty.maxminddb")
-      local reader, err = geoip.new("/usr/share/GeoIP/GeoLite2-Country.mmdb")
+      local reader, err = geoip.new("/usr/share/GeoIP/geoip.dat")
       if not reader then
         ngx.log(ngx.ERR, "failed to open MaxMind DB: ", err)
         ngx.header["Set-Cookie"] = "region=GLOBAL; Path=/; Max-Age=3600"
