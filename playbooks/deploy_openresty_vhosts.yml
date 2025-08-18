@@ -9,6 +9,18 @@
       - name: cn-artifact.svc.plus
         ssl_certificate: /etc/ssl/svc.plus.pem
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+      - name: www.svc.plus
+        template: geo_redirect.conf.j2
+        cn_target: cn-homepage.svc.plus
+        global_target: global-homepage.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+      - name: artifact.svc.plus
+        template: geo_redirect.conf.j2
+        cn_target: cn-artifact.svc.plus
+        global_target: global-artifact.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
   roles:
     - roles/vhosts/common/
     - roles/vhosts/OpenResty/
@@ -21,6 +33,18 @@
         ssl_certificate: /etc/ssl/svc.plus.pem
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
       - name: global-artifact.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+      - name: www.svc.plus
+        template: geo_redirect.conf.j2
+        cn_target: cn-homepage.svc.plus
+        global_target: global-homepage.svc.plus
+        ssl_certificate: /etc/ssl/svc.plus.pem
+        ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+      - name: artifact.svc.plus
+        template: geo_redirect.conf.j2
+        cn_target: cn-artifact.svc.plus
+        global_target: global-artifact.svc.plus
         ssl_certificate: /etc/ssl/svc.plus.pem
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
   roles:
