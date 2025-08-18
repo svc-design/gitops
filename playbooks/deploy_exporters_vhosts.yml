@@ -3,6 +3,11 @@
   become: true
   vars:
     group: cn-homepage.svc.plus
+    domains:
+      - cn-homepage.svc.plus
+      - cn-artifact.svc.plus
+      - www.svc.plus
+      - artifact.svc.plus
   roles:
     - roles/vhosts/common/
     - roles/vhosts/node_exporter/
@@ -12,6 +17,11 @@
   become: true
   vars:
     group: global-homepage.svc.plus
+    domains:
+      - global-homepage.svc.plus
+      - global-artifact.svc.plus
+      - www.svc.plus
+      - artifact.svc.plus
   roles:
     - roles/vhosts/common/
     - roles/vhosts/node_exporter/
