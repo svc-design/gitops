@@ -5,25 +5,59 @@
       - gnupg
       - apt-transport-https
     state: present
-    update_cache: yes
+    update_cache: true
 
 - name: Import OpenResty GPG key
-  command: >-
-    bash -c 'curl -fsSL https://openresty.org/package/pubkey.gpg | gpg --dearmor -o /usr/share/keyrings/openresty.gpg'
+  shell: |
+    curl -fsSL https://openresty.org/package/pubkey.gpg | \
+    gpg --dearmor -o /usr/share/keyrings/openresty.gpg
   args:
     creates: /usr/share/keyrings/openresty.gpg
 
+# yamllint disable rule:line-length
 - name: Add OpenResty apt repository
   apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/openresty.gpg] http://openresty.org/package/ubuntu jammy main"
     filename: openresty
     state: present
+# yamllint enable rule:line-length
 
 - name: Install OpenResty
   apt:
     name: openresty
     state: present
-    update_cache: yes
+    update_cache: true
+
+- name: Install GeoIP dependencies
+  apt:
+    name: luarocks
+    state: present
+    update_cache: true
+
+- name: Install lua-resty-maxminddb
+  command: "luarocks install lua-resty-maxminddb"
+  args:
+    creates: /usr/local/openresty/site/lualib/resty/maxminddb.lua
+
+- name: Ensure GeoIP database directory exists
+  file:
+    path: /usr/share/GeoIP
+    state: directory
+    mode: "0755"
+
+# yamllint disable rule:line-length
+- name: Download GeoLite2 Country database
+  get_url:
+    url: https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz
+    dest: /usr/share/GeoIP/GeoLite2-Country.mmdb.gz
+# yamllint enable rule:line-length
+
+- name: Decompress GeoLite2 Country database
+  unarchive:
+    src: /usr/share/GeoIP/GeoLite2-Country.mmdb.gz
+    dest: /usr/share/GeoIP/
+    remote_src: true
+    creates: /usr/share/GeoIP/GeoLite2-Country.mmdb
 
 - name: Ensure sites-available directory exists
   file:
@@ -38,7 +72,8 @@
 
 - name: Deploy vhost configurations
   template:
-    # Use item.template if provided; otherwise default to the unified site template
+    # Use item.template if provided;
+    # otherwise default to the unified site template
     src: "{{ item.template | default('site.conf.j2') }}"
     dest: "/usr/local/openresty/nginx/conf/sites-available/{{ item.name }}.conf"
   loop: "{{ domain | default([]) }}"
@@ -47,7 +82,7 @@
 - name: Enable and start OpenResty
   systemd:
     name: openresty
-    enabled: yes
+    enabled: true
     state: started
 
 - name: Verify OpenResty core API
