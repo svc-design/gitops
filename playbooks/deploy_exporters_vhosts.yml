@@ -1,0 +1,18 @@
+- name: setup Prometheus exporters
+  hosts: cn-homepage.svc.plus
+  become: true
+  vars:
+    group: cn-homepage.svc.plus
+  roles:
+    - roles/vhosts/common/
+    - roles/vhosts/node_exporter/
+    - roles/vhosts/process_exporter/
+- name: setup Prometheus exporters
+  hosts: global-homepage.svc.plus
+  become: true
+  vars:
+    group: global-homepage.svc.plus
+  roles:
+    - roles/vhosts/common/
+    - roles/vhosts/node_exporter/
+    - roles/vhosts/process_exporter/
