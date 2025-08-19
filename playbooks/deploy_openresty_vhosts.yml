@@ -38,6 +38,9 @@
           - global-artifact.svc.plus
         ssl_certificate: /etc/ssl/svc.plus.pem
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
+        root: /data/update-server
+        autoindex_paths:
+          - "/"
         type: artifact
   roles:
     - roles/vhosts/common/
