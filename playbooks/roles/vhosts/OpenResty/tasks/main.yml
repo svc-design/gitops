@@ -65,11 +65,10 @@
 
 - name: Deploy vhost configurations
   template:
-    # Use item.template if provided;
-    # otherwise default to the unified site template
-    src: "{{ item.template | default('site.conf.j2') }}"
+    # Use item.template if provided; otherwise select by vhost type
+    src: "{{ item.template | default(item.type ~ '.conf.j2') }}"
     dest: "/usr/local/openresty/nginx/conf/sites-available/{{ item.name }}.conf"
-  loop: "{{ domain | default([]) }}"
+  loop: "{{ vhosts | default([]) }}"
   notify: Restart OpenResty
 
 - name: Enable and start OpenResty
