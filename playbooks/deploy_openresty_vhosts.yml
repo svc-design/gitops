@@ -35,7 +35,7 @@
       - name: global-artifact.svc.plus
         domain:
           - artifact.svc.plus
-          - cn-artifact.svc.plus
+          - global-artifact.svc.plus
         ssl_certificate: /etc/ssl/svc.plus.pem
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
         type: artifact
