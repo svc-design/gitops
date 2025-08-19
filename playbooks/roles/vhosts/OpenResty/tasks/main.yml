@@ -47,6 +47,15 @@
   loop: "{{ vhosts | default([]) }}"
   notify: Restart OpenResty
 
+- name: Ensure artifact root directories exist
+  file:
+    path: "{{ item.root }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: "0755"
+  loop: "{{ vhosts | default([]) | selectattr('type', 'equalto', 'artifact') | selectattr('root', 'defined') | list }}"
+
 - name: Enable and start OpenResty
   systemd:
     name: openresty
