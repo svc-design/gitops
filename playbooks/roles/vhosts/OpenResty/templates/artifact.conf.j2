@@ -1,0 +1,35 @@
+server {
+  listen 443 ssl;
+  server_name {{ item.domain | join(' ') }};
+
+  ssl_certificate     {{ item.ssl_certificate }};
+  ssl_certificate_key {{ item.ssl_certificate_key }};
+  ssl_protocols       TLSv1.2 TLSv1.3;
+  ssl_ciphers         HIGH:!aNULL:!MD5;
+
+  root /data/update-server;
+  index index.html;
+
+  location / {
+    add_header Accept-Ranges bytes;
+    try_files $uri $uri/ =404;
+  }
+
+  location ~* \.(dmg|zip|tar\.gz|deb|rpm|exe|pkg|AppImage|apk|ipa)$ {
+    expires 7d;
+    access_log off;
+    add_header Cache-Control "public";
+    add_header Accept-Ranges bytes;
+    try_files $uri =404;
+  }
+
+  location ~ /\.[^/]+ {
+    deny all;
+  }
+}
+
+server {
+  listen 80;
+  server_name {{ item.domain | join(' ') }};
+  return 301 https://$host$request_uri;
+}
