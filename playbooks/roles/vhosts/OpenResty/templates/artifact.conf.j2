@@ -16,24 +16,22 @@ server {
   {% set autoindex_paths = item.autoindex_paths | default(vhost_defaults.autoindex_paths) %}
 
   # 目录浏览（打开 autoindex）—可列出整个 {{ item.root | default(vhost_defaults.root) }}
+  {% if '/' in autoindex_paths %}
   location / {
-    {% if '/' in autoindex_paths %}
     autoindex on;
     autoindex_exact_size off;
     autoindex_localtime on;
-    {% endif %}
     add_header Accept-Ranges bytes;
     try_files $uri $uri/ =404;   # 保持原有 404 语义
   }
-
-  {% for path in autoindex_paths %}
-  {% if path != '/' %}
+  {% elif %}
+    {% for path in autoindex_paths %}
   location {{ path }} {
     autoindex on;
     autoindex_exact_size off;
     autoindex_localtime on;
   }
-  {% endif %}
+    {% endif %}
   {% endfor %}
 
   # 常见安装包直下读文件（大小写不敏感）
