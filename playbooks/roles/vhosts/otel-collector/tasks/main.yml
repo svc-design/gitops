@@ -1,0 +1,71 @@
+- name: Ensure openobserve-agent user exists
+  ansible.builtin.user:
+    name: openobserve-agent
+    system: true
+    shell: /usr/sbin/nologin
+    create_home: false
+  when: inventory_hostname in groups[group]
+
+- name: Download otelcol-contrib archive
+  ansible.builtin.get_url:
+    url: >-
+      https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{{
+      otel_collector_version | default('0.102.0') }}/otelcol-contrib_{{
+      otel_collector_version | default('0.102.0') }}_linux_amd64.tar.gz
+    dest: /tmp/otelcol-contrib.tar.gz
+    mode: "0644"
+  when: inventory_hostname in groups[group]
+
+- name: Extract otelcol-contrib
+  ansible.builtin.unarchive:
+    src: /tmp/otelcol-contrib.tar.gz
+    dest: /tmp
+    remote_src: true
+    creates: "/tmp/otelcol-contrib_{{ otel_collector_version | default('0.102.0') }}_linux_amd64"
+  when: inventory_hostname in groups[group]
+
+- name: Install otelcol-contrib binary
+  ansible.builtin.copy:
+    src: "/tmp/otelcol-contrib_{{ otel_collector_version | default('0.102.0') }}_linux_amd64/otelcol-contrib"
+    dest: /usr/local/bin/otelcol-contrib
+    mode: '0755'
+    remote_src: true
+  when: inventory_hostname in groups[group]
+
+- name: Remove otelcol-contrib archive
+  ansible.builtin.file:
+    path: /tmp/otelcol-contrib.tar.gz
+    state: absent
+  when: inventory_hostname in groups[group]
+
+- name: Cleanup extracted otelcol-contrib directory
+  ansible.builtin.file:
+    path: "/tmp/otelcol-contrib_{{ otel_collector_version | default('0.102.0') }}_linux_amd64"
+    state: absent
+  when: inventory_hostname in groups[group]
+
+- name: Deploy otel collector config
+  ansible.builtin.template:
+    src: otel-config.yaml
+    dest: /etc/otel-config.yaml
+    owner: openobserve-agent
+    group: openobserve-agent
+    mode: '0644'
+  when: inventory_hostname in groups[group]
+
+- name: Create otel collector service
+  ansible.builtin.template:
+    src: otel-collector.service
+    dest: /etc/systemd/system/otel-collector.service
+    owner: root
+    group: root
+    mode: '0644'
+  when: inventory_hostname in groups[group]
+
+- name: Enable and start otel collector
+  ansible.builtin.systemd:
+    name: otel-collector
+    enabled: true
+    state: restarted
+    daemon_reload: true
+  when: inventory_hostname in groups[group]
