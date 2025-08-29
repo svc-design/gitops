@@ -1,0 +1,71 @@
+receivers:
+  prometheus:
+    config:
+      global:
+        scrape_interval: 10s
+      scrape_configs:
+        - job_name: 'node-exporter'
+          static_configs:
+            - targets: ['localhost:9100']
+              labels:
+                vendor:  '{{ otel_vendor | default("aws") }}'
+                account: '{{ otel_account | default("prod") }}'
+                group:   '{{ otel_group | default("core") }}'
+                name:    '{{ otel_name | default(inventory_hostname) }}'
+                iid:     '{{ otel_iid | default(ansible_default_ipv4.address) }}'
+        - job_name: 'process-exporter'
+          static_configs:
+            - targets: ['localhost:9256']
+              labels:
+                vendor:  '{{ otel_vendor | default("aws") }}'
+                account: '{{ otel_account | default("prod") }}'
+                group:   '{{ otel_group | default("core") }}'
+                name:    '{{ otel_name | default(inventory_hostname) }}'
+                iid:     '{{ otel_iid | default(ansible_default_ipv4.address) }}'
+  journald:
+    directory: /var/log/journal
+  filelog/std:
+    include: [ /var/log/**log ]
+
+processors:
+  resourcedetection/system:
+    detectors: ["system"]
+    system:
+      hostname_sources: ["os"]
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 75
+    spike_limit_percentage: 15
+  batch:
+    send_batch_size: 10000
+    timeout: 10s
+
+extensions:
+  zpages: {}
+
+exporters:
+  otlphttp/openobserve:
+    endpoint: {{ otlp_endpoint | default('https://otel.svc.plus/api/default/') }}
+    headers:
+      Authorization: "{{ otlp_auth | default('Basic cm9vdEBleGFtcGxlLmNvbTpiNTVkbHFLenVLamZXVXRY') }}"
+  otlphttp/openobserve_journald:
+    endpoint: {{ otlp_endpoint | default('https://otel.svc.plus/api/default/') }}
+    headers:
+      Authorization: "{{ otlp_auth | default('Basic cm9vdEBleGFtcGxlLmNvbTpiNTVkbHFLenVLamZXVXRY') }}"
+      stream-name: journald
+
+service:
+  extensions: [zpages]
+  pipelines:
+    metrics:
+      receivers: [prometheus]
+      processors: [resourcedetection/system, memory_limiter, batch]
+      exporters: [otlphttp/openobserve]
+    logs:
+      receivers: [filelog/std]
+      processors: [resourcedetection/system, memory_limiter, batch]
+      exporters: [otlphttp/openobserve]
+    logs/journald:
+      receivers: [journald]
+      processors: [resourcedetection/system, memory_limiter, batch]
+      exporters: [otlphttp/openobserve_journald]
