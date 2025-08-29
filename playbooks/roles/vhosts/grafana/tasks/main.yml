@@ -59,6 +59,15 @@
     mode: '0644'
   when: inventory_hostname in groups[group]
 
+- name: Configure Grafana ini
+  ansible.builtin.template:
+    src: grafana.ini.j2
+    dest: /etc/grafana/grafana.ini
+    owner: root
+    group: grafana
+    mode: '0640'
+  when: inventory_hostname in groups[group]
+
 - name: Install grafana dashboard pull timer
   ansible.builtin.template:
     src: grafana-dash-pull.timer.j2
