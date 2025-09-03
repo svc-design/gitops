@@ -30,7 +30,6 @@
     exporters:
       endpoint: https://otel.svc.plus/api/default/
   roles:
-    - roles/vhosts/common/
     - roles/vhosts/node_exporter/
     - roles/vhosts/process_exporter/
     - roles/vhosts/otel-collector/
