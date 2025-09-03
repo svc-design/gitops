@@ -1,12 +1,11 @@
 enable_set_timezone: true       # 默认启用 Set timezone
 enable_set_hostname: true       # 默认启用 Set hostname
-enable_install_packages: false  # 默认不安装额外的软件包
 enable_all_hosts_update: false  # 默认不更新所有主机的条目
 
 rsyslog_log_rotation:           # 可选的日志管理配置
   enable: true                  # 启用 rsyslog 日志管理
   rotate_count: 4               # 默认保留的日志文件数量
-  rotate_frequency: weekly      # 默认每周轮换, 可选：daily, hourly
+  rotate_frequency: daily      # 默认每周轮换, 可选：daily, hourly
   max_log_size: 100M            # 默认日志文件最大大小
 
 journald_log_rotation:          # 启用 journald 日志管理
@@ -16,6 +15,21 @@ journald_log_rotation:          # 启用 journald 日志管理
   max_file_sec: 1month          # 默认日志文件保存的最大时长
   system_max_use: 1G            # 默认系统日志最大使用空间
   runtime_max_use: 500M         # 默认运行时日志最大使用空间
+
+enable_install_packages: false  # 默认不安装额外的软件包
+# 包列表（可被 play/host/group 覆盖）
+common_packages:
+  - vault
+  - auditd
+  - uidmap
+  - fuse-overlayfs
+# 是否启用 Ubuntu 的 universe 组件（仅 Ubuntu）
+enable_ubuntu_universe: false
+# 是否启用 HashiCorp 官方仓库
+enable_hashicorp_repo: false
+# 可选：指定 suite，默认用系统发行版代号（jammy/bookworm 等）
+hashicorp_repo_suite: "{{ ansible_distribution_release }}"
+
 
     #config_temp:
     #  k8s-node:
@@ -36,8 +50,3 @@ journald_log_rotation:          # 启用 journald 日志管理
     #    selinux_enable: false
     #    ssh_auth:
     #      key: /root/.ssh/id_rsa.pub
-
-vhosts: []
-vhost_defaults:
-  root: /data/update-server
-  autoindex_paths: []
