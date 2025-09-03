@@ -1,3 +1,19 @@
+---
+- name: Set otel-collector version and arch
+  ansible.builtin.set_fact:
+    otel_collector_version: "{{ otel_collector_version | default('0.133.0') }}"
+    _otel_arch_map:
+      x86_64: amd64
+      amd64: amd64
+      aarch64: arm64
+      arm64: arm64
+  when: inventory_hostname in groups[group]
+
+- name: Resolve otel-collector arch
+  ansible.builtin.set_fact:
+    otel_arch: "{{ _otel_arch_map.get(ansible_architecture, 'amd64') }}"
+  when: inventory_hostname in groups[group]
+
 - name: Ensure openobserve-agent user exists
   ansible.builtin.user:
     name: openobserve-agent
@@ -6,27 +22,25 @@
     create_home: false
   when: inventory_hostname in groups[group]
 
+# === 默认：tar.gz 安装方案 ===
 - name: Download otelcol-contrib archive
   ansible.builtin.get_url:
-    url: >-
-      https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{{
-      otel_collector_version | default('0.102.0') }}/otelcol-contrib_{{
-      otel_collector_version | default('0.102.0') }}_linux_amd64.tar.gz
-    dest: /tmp/otelcol-contrib.tar.gz
+    url: "https://artifact.svc.plus/otel/OpenTelemetry/v{{ otel_collector_version }}/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.tar.gz"
+    dest: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.tar.gz"
     mode: "0644"
   when: inventory_hostname in groups[group]
 
 - name: Extract otelcol-contrib
   ansible.builtin.unarchive:
-    src: /tmp/otelcol-contrib.tar.gz
+    src: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.tar.gz"
     dest: /tmp
     remote_src: true
-    creates: "/tmp/otelcol-contrib_{{ otel_collector_version | default('0.102.0') }}_linux_amd64"
+    creates: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}"
   when: inventory_hostname in groups[group]
 
 - name: Install otelcol-contrib binary
   ansible.builtin.copy:
-    src: "/tmp/otelcol-contrib_{{ otel_collector_version | default('0.102.0') }}_linux_amd64/otelcol-contrib"
+    src: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}/otelcol-contrib"
     dest: /usr/local/bin/otelcol-contrib
     mode: '0755'
     remote_src: true
@@ -34,15 +48,34 @@
 
 - name: Remove otelcol-contrib archive
   ansible.builtin.file:
-    path: /tmp/otelcol-contrib.tar.gz
+    path: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.tar.gz"
     state: absent
   when: inventory_hostname in groups[group]
 
 - name: Cleanup extracted otelcol-contrib directory
   ansible.builtin.file:
-    path: "/tmp/otelcol-contrib_{{ otel_collector_version | default('0.102.0') }}_linux_amd64"
+    path: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}"
     state: absent
   when: inventory_hostname in groups[group]
+
+# === 可选：Debian/Ubuntu .deb 安装方案（默认禁用） ===
+# - name: Download otelcol-contrib deb
+#   ansible.builtin.get_url:
+#     url: "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{{ otel_collector_version }}/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.deb"
+#     dest: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.deb"
+#     mode: "0644"
+#   when:
+#     - inventory_hostname in groups[group]
+#     - ansible_os_family == 'Debian'
+#
+# - name: Install otelcol-contrib via deb
+#   ansible.builtin.apt:
+#     deb: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.deb"
+#     state: present
+#     update_cache: false
+#   when:
+#     - inventory_hostname in groups[group]
+#     - ansible_os_family == 'Debian'
 
 - name: Deploy otel collector config
   ansible.builtin.template:
