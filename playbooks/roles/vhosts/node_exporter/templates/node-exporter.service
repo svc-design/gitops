@@ -1,4 +1,3 @@
-[#] template for node-exporter systemd service
 [Unit]
 Description=Prometheus Node Exporter (tiny, LAN)
 After=network.target
