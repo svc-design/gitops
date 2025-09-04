@@ -16,19 +16,37 @@ journald_log_rotation:          # 启用 journald 日志管理
   system_max_use: 1G            # 默认系统日志最大使用空间
   runtime_max_use: 500M         # 默认运行时日志最大使用空间
 
-enable_install_packages: false  # 默认不安装额外的软件包
-# 包列表（可被 play/host/group 覆盖）
-common_packages:
+# 总开关
+enable_common: true
+# 子开关
+repo_setup: true         # 是否配置仓库/keys
+install_packages: true   # 是否安装软件包
+auto_update_cache: true  # 是否在 repo_setup 后自动 apt update
+enable_universe: false    # Ubuntu 是否启用 universe 仓库
+
+# keyring 目录
+apt_key_dir: /etc/apt/keyrings
+
+# 清理的遗留路径
+apt_repo_legacy:
+  - /etc/apt/sources.list.d/hashicorp.sources
+  - /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+# 声明式仓库列表（传统 .list）
+repos:
+  - name: hashicorp
+    enabled: false
+    uri: "https://apt.releases.hashicorp.com"
+    suite: "{{ ansible_distribution_release }}"
+    components: ["main"]
+    key_url: "https://apt.releases.hashicorp.com/gpg"
+
+# 要安装的软件包
+packages:
   - vault
   - auditd
   - uidmap
   - fuse-overlayfs
-# 是否启用 Ubuntu 的 universe 组件（仅 Ubuntu）
-enable_ubuntu_universe: false
-# 是否启用 HashiCorp 官方仓库
-enable_hashicorp_repo: false
-# 可选：指定 suite，默认用系统发行版代号（jammy/bookworm 等）
-hashicorp_repo_suite: "{{ ansible_distribution_release }}"
 
 
     #config_temp:
