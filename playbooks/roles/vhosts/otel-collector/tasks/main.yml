@@ -33,7 +33,7 @@
 - name: Extract otelcol-contrib
   ansible.builtin.unarchive:
     src: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.tar.gz"
-    dest: /tmp
+    dest: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}"
     remote_src: true
     creates: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}"
   when: inventory_hostname in groups[group]
@@ -61,7 +61,8 @@
 # === 可选：Debian/Ubuntu .deb 安装方案（默认禁用） ===
 # - name: Download otelcol-contrib deb
 #   ansible.builtin.get_url:
-#     url: "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/v{{ otel_collector_version }}/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.deb"
+#     url: "https://github.com/open-telemetry/opentelemetry-collector-releases/releases/download/"
+#       "v{{ otel_collector_version }}/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.deb"
 #     dest: "/tmp/otelcol-contrib_{{ otel_collector_version }}_linux_{{ otel_arch }}.deb"
 #     mode: "0644"
 #   when:
