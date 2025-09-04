@@ -1,0 +1,9 @@
+- name: setup otel exporters
+  hosts: otel.svc.plus
+  become: true
+  vars:
+    group: web
+    exporters:
+      endpoint: https://otel.svc.plus/api/default/
+  roles:
+    - roles/vhosts/otel-collector/

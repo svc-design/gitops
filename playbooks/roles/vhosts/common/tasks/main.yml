@@ -13,10 +13,20 @@
 - name: Run secure_ssh.sh script
   script: files/secure_ssh.sh
 
-- name: Install packages
-  include_tasks: install_packages.yml
-  when: ansible_facts.os_family == 'Debian'
-  tags: [pkgs, baseline]
+- name: "Common | Run on Debian family only"
+  when:
+    - enable_common | bool
+    - ansible_facts.os_family == 'Debian'
+  block:
+    - name: "Common | Repo & keys"
+      ansible.builtin.include_tasks: repo_setup.yml
+      when: repo_setup | bool
+      tags: [repo, baseline]
+
+    - name: "Common | Packages"
+      ansible.builtin.include_tasks: packages.yml
+      when: install_packages | bool
+      tags: [pkgs, baseline]
 
 #- name: Include GPU Configuration
 #  include_tasks: include_gpu.yaml

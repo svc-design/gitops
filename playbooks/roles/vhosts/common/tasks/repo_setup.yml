@@ -1,0 +1,96 @@
+---
+# 0) 统一 keyring 路径
+- name: Ensure keyring dir exists
+  ansible.builtin.file:
+    path: "{{ apt_key_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  become: true
+
+# 0.1) 确保 dearmor 可用
+- name: Ensure gnupg is present for dearmor
+  ansible.builtin.apt:
+    name: gnupg
+    state: present
+    update_cache: false
+  become: true
+
+# 1) 清理历史遗留
+- name: Remove legacy repo/keyring paths
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ apt_repo_legacy | default([]) }}"
+  become: true
+
+# 2) Ubuntu 可选 universe
+- name: Enable Ubuntu 'universe' component (Ubuntu only)
+  ansible.builtin.apt_repository:
+    repo: "deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} main universe"
+    state: present
+    filename: "ubuntu-{{ ansible_distribution_release }}-universe"
+  when:
+    - ansible_facts.distribution == 'Ubuntu'
+    - enable_universe | bool
+  become: true
+
+# 3) 每个仓库：下载 key（可选）→ dearmor（可选）→ 添加 .list（含 signed-by）
+- name: "Fetch ASCII key (if key_url provided)"
+  ansible.builtin.get_url:
+    url: "{{ repo.key_url }}"
+    dest: "{{ apt_key_dir }}/{{ repo.name }}.asc"
+    mode: '0644'
+  when: repo.key_url is defined and repo.key_url | length > 0
+  loop: "{{ repos | default([]) }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo.name }}"
+  become: true
+
+- name: "Dearmor key"
+  ansible.builtin.command:
+    cmd: "gpg --dearmor -o {{ apt_key_dir }}/{{ repo.name }}.gpg {{ apt_key_dir }}/{{ repo.name }}.asc"
+    creates: "{{ apt_key_dir }}/{{ repo.name }}.gpg"
+  when: repo.key_url is defined and repo.key_url | length > 0
+  loop: "{{ repos | default([]) }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo.name }}"
+  become: true
+
+- name: "Ensure keyring permission"
+  ansible.builtin.file:
+    path: "{{ (repo.signed_by | default(apt_key_dir ~ '/' ~ repo.name ~ '.gpg')) }}"
+    owner: root
+    group: root
+    mode: '0644'
+    state: file
+  when: (repo.key_url is defined and repo.key_url | length > 0) or (repo.signed_by is defined)
+  loop: "{{ repos | default([]) }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo.name }}"
+  become: true
+
+- name: "Add classic .list repo with signed-by"
+  ansible.builtin.apt_repository:
+    repo: >-
+      deb [signed-by={{ repo.signed_by | default(apt_key_dir ~ '/' ~ repo.name ~ '.gpg') }}]
+      {{ repo.uri }} {{ repo.suite }} {{ (repo.components | default(['main'])) | join(' ') }}
+    filename: "{{ repo.name }}"
+    state: "{{ (repo.enabled | default(false) | bool) | ternary('present','absent') }}"
+  when: repo.enabled | default(false) | bool
+  loop: "{{ repos | default([]) }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo.name }}"
+  become: true
+
+# 4) 统一更新 apt cache（可控）
+- name: Update apt cache after repo setup
+  ansible.builtin.apt:
+    update_cache: true
+  when: auto_update_cache | bool
+  become: true
