@@ -9,7 +9,8 @@
           - cn-homepage.svc.plus
         ssl_certificate: /etc/ssl/svc.plus.pem
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
-        type: homepage
+        root: /data/update-server/dashboard
+        type: homepage-static
       - name: cn-artifact.svc.plus
         domain:
           - artifact.svc.plus
@@ -32,7 +33,8 @@
           - global-homepage.svc.plus
         ssl_certificate: /etc/ssl/svc.plus.pem
         ssl_certificate_key: /etc/ssl/svc.plus.rsa.key
-        type: homepage
+        root: /data/update-server/dashboard
+        type: homepage-static
       - name: global-artifact.svc.plus
         domain:
           - artifact.svc.plus
