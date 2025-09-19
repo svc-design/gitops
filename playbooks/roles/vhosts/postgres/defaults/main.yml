@@ -1,0 +1,23 @@
+postgresql_version: "16"
+postgresql_listen_addresses: "*"
+postgresql_port: 5432
+postgresql_conf_path: "/etc/postgresql/{{ postgresql_version }}/main/postgresql.conf"
+postgresql_hba_path: "/etc/postgresql/{{ postgresql_version }}/main/pg_hba.conf"
+postgresql_allowed_hosts: []
+postgresql_auth_method: "scram-sha-256"
+postgresql_password_encryption: "scram-sha-256"
+postgresql_service_name: "postgresql"
+postgresql_package_dependencies:
+  - ca-certificates
+  - gnupg
+  - lsb-release
+postgresql_extra_packages:
+  - python3-psycopg2
+postgresql_packages_base:
+  - "postgresql-{{ postgresql_version }}"
+  - "postgresql-client-{{ postgresql_version }}"
+  - "postgresql-contrib-{{ postgresql_version }}"
+postgresql_use_official_repo: true
+postgresql_repo_key_url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+postgresql_repo_key_path: "/usr/share/keyrings/postgresql-archive-keyring.gpg"
+postgresql_repo: "deb [signed-by={{ postgresql_repo_key_path }}] https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
