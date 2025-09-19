@@ -1,0 +1,7 @@
+xcontrol_config_dir: /etc/XControl
+xcontrol_config_filename: server-qwen-ai.yaml
+xcontrol_service_name: xcontrol-server
+xcontrol_service_unit: xcontrol-server.service
+xcontrol_service_user: root
+xcontrol_service_group: root
+xcontrol_binary_path: /usr/bin/xcontrol-server
