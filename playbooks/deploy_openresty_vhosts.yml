@@ -20,7 +20,6 @@
         root: /data/update-server
         type: artifact
   roles:
-    - roles/vhosts/common/
     - roles/vhosts/OpenResty/
 - name: setup OpenResty server
   hosts: global-homepage.svc.plus
@@ -46,5 +45,4 @@
           - "/"
         type: artifact
   roles:
-    - roles/vhosts/common/
     - roles/vhosts/OpenResty/
