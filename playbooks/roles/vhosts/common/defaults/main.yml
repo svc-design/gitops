@@ -19,10 +19,10 @@ journald_log_rotation:          # 启用 journald 日志管理
 # 总开关
 enable_common: true
 # 子开关
-repo_setup: true         # 是否配置仓库/keys
-install_packages: true   # 是否安装软件包
-auto_update_cache: true  # 是否在 repo_setup 后自动 apt update
+repo_setup: false         # 是否配置仓库/keys
 enable_universe: false    # Ubuntu 是否启用 universe 仓库
+install_packages: true    # 是否安装软件包
+auto_update_cache: true   # 是否在 repo_setup 后自动 apt update
 
 # keyring 目录
 apt_key_dir: /etc/apt/keyrings
@@ -35,7 +35,6 @@ apt_repo_legacy:
 # 声明式仓库列表（传统 .list）
 repos:
   - name: hashicorp
-    enabled: false
     uri: "https://apt.releases.hashicorp.com"
     suite: "{{ ansible_distribution_release }}"
     components: ["main"]
@@ -43,7 +42,6 @@ repos:
 
 # 要安装的软件包
 packages:
-  - vault
   - auditd
   - uidmap
   - fuse-overlayfs
