@@ -5,3 +5,5 @@
 playbooks/deepflow/*.zip
 playbooks/deepflow/*.tar.gz
 playbooks/deepflow/deepflow-agent-playbook/*.zip
+
+remotes.before.txt
