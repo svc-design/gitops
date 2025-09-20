@@ -1,0 +1,10 @@
+- name: Setup postgres server
+  hosts: cn-homepage.svc.plus
+  become: true
+  roles:
+    - roles/vhosts/postgres
+- name: Setup postgres server
+  hosts: global-homepage.svc.plus
+  become: true
+  roles:
+    - roles/vhosts/postgres/
