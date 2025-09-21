@@ -1,0 +1,78 @@
+---
+- name: Compute archive information
+  ansible.builtin.set_fact:
+    blackbox_archive_arch: "{{ (blackbox_arch_map | default({})).get((ansible_architecture | lower), 'linux-amd64') }}"
+    blackbox_archive_name: "blackbox_exporter-{{ blackbox_version }}.{{ blackbox_archive_arch }}"
+    blackbox_archive_file: "/tmp/{{ blackbox_archive_name }}.tar.gz"
+
+- name: Ensure user exists
+  ansible.builtin.user:
+    name: "{{ blackbox_user }}"
+    shell: /usr/sbin/nologin
+    system: true
+    create_home: false
+
+- name: Create config dir
+  ansible.builtin.file:
+    path: "{{ blackbox_conf_dir }}"
+    state: directory
+    owner: "{{ blackbox_user }}"
+    group: "{{ blackbox_user }}"
+    mode: "0750"
+
+- name: Download blackbox_exporter tarball
+  ansible.builtin.get_url:
+    url: "https://github.com/prometheus/blackbox_exporter/releases/download/v{{ blackbox_version }}/{{ blackbox_archive_name }}.tar.gz"
+    dest: "{{ blackbox_archive_file }}"
+    mode: "0644"
+
+- name: Unpack archive
+  ansible.builtin.unarchive:
+    src: "{{ blackbox_archive_file }}"
+    dest: "/tmp"
+    remote_src: true
+  register: unpack
+
+- name: Install binary
+  ansible.builtin.copy:
+    src: "/tmp/{{ blackbox_archive_name }}/blackbox_exporter"
+    dest: "{{ blackbox_bin }}"
+    mode: "0755"
+    owner: "root"
+    group: "root"
+  when: unpack is changed
+
+- name: Render blackbox configuration
+  ansible.builtin.template:
+    src: "blackbox.yml.j2"
+    dest: "{{ blackbox_conf_file }}"
+    owner: "{{ blackbox_user }}"
+    group: "{{ blackbox_user }}"
+    mode: "0640"
+  notify: Restart blackbox
+
+- name: Install systemd unit
+  ansible.builtin.template:
+    src: "blackbox.service.j2"
+    dest: "/etc/systemd/system/blackbox.service"
+    mode: "0644"
+  notify:
+    - Daemon reload
+    - Restart blackbox
+
+- name: Enable and start service
+  ansible.builtin.systemd:
+    name: blackbox
+    enabled: true
+    state: started
+
+- name: Daemon reload
+  ansible.builtin.systemd:
+    daemon_reload: true
+  listen: Daemon reload
+
+- name: Restart blackbox
+  ansible.builtin.systemd:
+    name: blackbox
+    state: restarted
+  listen: Restart blackbox
