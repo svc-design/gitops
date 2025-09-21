@@ -78,6 +78,15 @@
 #     - inventory_hostname in groups[group]
 #     - ansible_os_family == 'Debian'
 
+# === Configuration validation ===
+- name: Ensure OpenObserve authorization is provided
+  ansible.builtin.assert:
+    that:
+      - otlp_auth is defined
+      - otlp_auth | string | trim | length > 0
+    fail_msg: otlp_auth must be defined and non-empty for otel collector deployment
+  when: inventory_hostname in groups[group]
+
 - name: Deploy otel collector config
   ansible.builtin.template:
     src: otel-config.yaml
