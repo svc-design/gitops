@@ -1,3 +1,6 @@
+{% set node_static_configs = otel_prometheus_node_static_configs | mandatory('otel_prometheus_node_static_configs must be provided') %}
+{% set process_static_configs = otel_prometheus_process_static_configs | mandatory('otel_prometheus_process_static_configs must be provided') %}
+
 receivers:
   prometheus:
     config:
@@ -6,22 +9,22 @@ receivers:
       scrape_configs:
         - job_name: 'node-exporter'
           static_configs:
-            - targets: ['localhost:9100']
+{% for static_config in node_static_configs %}
+            - targets: {{ static_config.targets | to_json }}
               labels:
-                vendor:  '{{ otel_vendor | default("aws") }}'
-                account: '{{ otel_account | default("prod") }}'
-                group:   '{{ otel_group | default("core") }}'
-                name:    '{{ otel_name | default(inventory_hostname) }}'
-                iid:     '{{ otel_iid | default(ansible_default_ipv4.address) }}'
+{% for label_key, label_value in static_config.labels.items() %}
+                {{ label_key }}: '{{ label_value }}'
+{% endfor %}
+{% endfor %}
         - job_name: 'process-exporter'
           static_configs:
-            - targets: ['localhost:9256']
+{% for static_config in process_static_configs %}
+            - targets: {{ static_config.targets | to_json }}
               labels:
-                vendor:  '{{ otel_vendor | default("aws") }}'
-                account: '{{ otel_account | default("prod") }}'
-                group:   '{{ otel_group | default("core") }}'
-                name:    '{{ otel_name | default(inventory_hostname) }}'
-                iid:     '{{ otel_iid | default(ansible_default_ipv4.address) }}'
+{% for label_key, label_value in static_config.labels.items() %}
+                {{ label_key }}: '{{ label_value }}'
+{% endfor %}
+{% endfor %}
   journald:
     directory: /var/log/journal
   filelog/std:
@@ -47,11 +50,11 @@ exporters:
   otlphttp/openobserve:
     endpoint: {{ otlp_endpoint | default('https://otel.svc.plus/api/default/') }}
     headers:
-      Authorization: "{{ otlp_auth | default('Basic cm9vdEBleGFtcGxlLmNvbTpiNTVkbHFLenVLamZXVXRY') }}"
+      Authorization: "{{ otlp_auth }}"
   otlphttp/openobserve_journald:
     endpoint: {{ otlp_endpoint | default('https://otel.svc.plus/api/default/') }}
     headers:
-      Authorization: "{{ otlp_auth | default('Basic cm9vdEBleGFtcGxlLmNvbTpiNTVkbHFLenVLamZXVXRY') }}"
+      Authorization: "{{ otlp_auth }}"
       stream-name: journald
 
 service:
