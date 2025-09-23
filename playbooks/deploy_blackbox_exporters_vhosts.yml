@@ -1,5 +1,25 @@
 - name: Deploy blackbox exporter
-  hosts: dl.svc.plus
+  hosts: global-homepage.svc.plus
+  become: true
+  vars:
+    blackbox_version: "0.25.0"
+    blackbox_user: "blackbox"
+    blackbox_bin: "/usr/local/bin/blackbox_exporter"
+    blackbox_conf_dir: "/opt/blackbox"
+    blackbox_conf_file: "/opt/blackbox/blackbox.yml"
+    blackbox_listen: ":9115"
+    dl_business_host: "dl.svc.plus"
+    dl_download_path: "/download/"
+    blackbox_arch_map:
+      x86_64: linux-amd64
+      amd64: linux-amd64
+      aarch64: linux-arm64
+      arm64: linux-arm64
+  roles:
+    - roles/vhosts/common/
+    - roles/vhosts/blackbox_exporter/
+- name: Deploy blackbox exporter
+  hosts: cn-homepage.svc.plus
   become: true
   vars:
     blackbox_version: "0.25.0"
