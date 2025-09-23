@@ -1,10 +1,29 @@
 - name: Setup postgres server
   hosts: cn-homepage.svc.plus
   become: true
+  vars:
+    group: cn-homepage.svc.plus
+    repo_setup: true
+    repos: &postgresql_common_repos
+      - name: postgresql
+        uri: "http://apt.postgresql.org/pub/repos/apt"
+        suite: "{{ ansible_distribution_release }}-pgdg"
+        components: ["main"]
+        key_url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+        enabled: true
+    postgresql_use_official_repo: false
   roles:
-    - roles/vhosts/postgres
+    - roles/vhosts/common/
+    - roles/vhosts/postgres/
+
 - name: Setup postgres server
   hosts: global-homepage.svc.plus
   become: true
+  vars:
+    group: global-homepage.svc.plus
+    repo_setup: true
+    repos: *postgresql_common_repos
+    postgresql_use_official_repo: false
   roles:
+    - roles/vhosts/common/
     - roles/vhosts/postgres/
