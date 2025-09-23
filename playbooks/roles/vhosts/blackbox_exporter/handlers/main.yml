@@ -2,10 +2,8 @@
 - name: Daemon reload
   ansible.builtin.systemd:
     daemon_reload: true
-  listen: Daemon reload
 
 - name: Restart blackbox
   ansible.builtin.systemd:
     name: blackbox
     state: restarted
-  listen: Restart blackbox
