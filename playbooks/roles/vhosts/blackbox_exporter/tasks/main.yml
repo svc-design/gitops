@@ -1,7 +1,10 @@
 ---
-- name: Compute archive information
+- name: Determine archive architecture
   ansible.builtin.set_fact:
     blackbox_archive_arch: "{{ (blackbox_arch_map | default({})).get((ansible_architecture | lower), 'linux-amd64') }}"
+
+- name: Compute archive information
+  ansible.builtin.set_fact:
     blackbox_archive_name: "blackbox_exporter-{{ blackbox_version }}.{{ blackbox_archive_arch }}"
     blackbox_archive_file: "/tmp/{{ blackbox_archive_name }}.tar.gz"
 
