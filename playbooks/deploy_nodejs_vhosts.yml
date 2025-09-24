@@ -1,0 +1,8 @@
+---
+- name: Configure Node.js runtime for vhosts
+  hosts: nodejs_vhosts
+  gather_facts: true
+  vars:
+    nodejs_major_version: 22
+  roles:
+    - roles/vhosts/nodejs
