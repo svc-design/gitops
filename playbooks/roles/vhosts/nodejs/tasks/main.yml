@@ -1,0 +1,15 @@
+---
+- name: Include macOS tasks
+  ansible.builtin.include_tasks: darwin.yml
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Include Ubuntu tasks
+  ansible.builtin.include_tasks: ubuntu.yml
+  when:
+    - ansible_facts['os_family'] == 'Debian'
+    - ansible_facts['distribution'] == 'Ubuntu'
+
+- name: Fail for unsupported platforms
+  ansible.builtin.fail:
+    msg: "The nodejs role currently supports macOS and Ubuntu only."
+  when: ansible_facts['os_family'] not in ['Darwin', 'Debian'] or (ansible_facts['os_family'] == 'Debian' and ansible_facts['distribution'] != 'Ubuntu')
