@@ -17,6 +17,20 @@
     update_cache: false
   become: true
 
+# 0.2) 声明式 keyring 管理
+- name: "Manage declared apt keyrings"
+  ansible.builtin.include_tasks: manage_keyring.yml
+  when: (apt_keyrings | default([])) | length > 0
+  loop: "{{ apt_keyrings | default([]) }}"
+  loop_control:
+    loop_var: apt_keyring
+    label: "{{ apt_keyring.name | default(apt_keyring.dest | default('custom-keyring')) }}"
+  vars:
+    keyring_dest: "{{ apt_keyring.dest | default(apt_key_dir ~ '/' ~ apt_keyring.name ~ '.gpg') }}"
+    keyring_ascii: "{{ apt_keyring.asc_path | default(apt_key_dir ~ '/' ~ apt_keyring.name ~ '.asc') }}"
+    keyring_state: "{{ apt_keyring.state | default('present') }}"
+  tags: [repo, baseline]
+
 # 1) 清理历史遗留
 - name: Remove legacy repo/keyring paths
   ansible.builtin.file:
@@ -73,6 +87,22 @@
     loop_var: repo
     label: "{{ repo.name }}"
   become: true
+
+- name: "Cleanup repo specific paths"
+  when: repo.cleanup is defined and (repo.cleanup | length > 0)
+  become: true
+  loop: "{{ repos | default([]) }}"
+  loop_control:
+    loop_var: repo
+    label: "{{ repo.name }}"
+  block:
+    - name: "Cleanup repo specific path"
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop: "{{ repo.cleanup }}"
+      loop_control:
+        label: "{{ repo.name }} -> {{ item }}"
 
 - name: "Add classic .list repo with signed-by"
   ansible.builtin.apt_repository:
