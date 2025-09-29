@@ -10,3 +10,5 @@ blackbox_arch_map:
   amd64: linux-amd64
   aarch64: linux-arm64
   arm64: linux-arm64
+blackbox_download_base_url: "https://github.com/prometheus/blackbox_exporter/releases/download"
+blackbox_tmp_dir: "/tmp"
