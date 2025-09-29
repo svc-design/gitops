@@ -35,14 +35,6 @@ apt_repo_legacy:
   - /etc/apt/sources.list.d/hashicorp.sources
   - /usr/share/keyrings/hashicorp-archive-keyring.gpg
 
-# 声明式仓库列表（传统 .list）
-repos:
-  - name: hashicorp
-    uri: "https://apt.releases.hashicorp.com"
-    suite: "{{ ansible_distribution_release }}"
-    components: ["main"]
-    key_url: "https://apt.releases.hashicorp.com/gpg"
-
 # 要安装的软件包
 packages:
   - auditd
