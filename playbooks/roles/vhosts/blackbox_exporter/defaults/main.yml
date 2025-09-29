@@ -1,4 +1,10 @@
 ---
+blackbox_version: "0.25.0"
+blackbox_user: "blackbox"
+blackbox_bin: "/usr/local/bin/blackbox_exporter"
+blackbox_conf_dir: "/opt/blackbox"
+blackbox_conf_file: "/opt/blackbox/blackbox.yml"
+blackbox_listen: ":9115"
 blackbox_arch_map:
   x86_64: linux-amd64
   amd64: linux-amd64
