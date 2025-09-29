@@ -1,5 +1,5 @@
 ---
-blackbox_version: "0.25.0"
+blackbox_version: "0.27.0"
 blackbox_user: "blackbox"
 blackbox_bin: "/usr/local/bin/blackbox_exporter"
 blackbox_conf_dir: "/opt/blackbox"
