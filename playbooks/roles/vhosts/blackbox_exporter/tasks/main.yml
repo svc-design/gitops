@@ -44,6 +44,7 @@
     mode: "0755"
     owner: "root"
     group: "root"
+    remote_src: true
   when: unpack is changed
 
 - name: Render blackbox configuration
