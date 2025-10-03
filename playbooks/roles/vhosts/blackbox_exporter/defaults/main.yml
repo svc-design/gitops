@@ -12,3 +12,4 @@ blackbox_arch_map:
   arm64: linux-arm64
 blackbox_download_base_url: "https://dl.svc.plus/prometheus/blackbox_exporter"
 blackbox_tmp_dir: "/tmp"
+dl_business_host: "dl.svc.plus"
