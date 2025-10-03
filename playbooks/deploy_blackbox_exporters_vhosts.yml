@@ -7,10 +7,16 @@
         path:
           - "/docs/"
           - "/download/"
+          - "/login/"
+          - "/logout/"
+          - '/register/'
       - name: "cn-homepage.svc.plus"
         path:
           - "/docs/"
           - "/download/"
+          - "/login/"
+          - "/logout/"
+          - '/register/'
       - name: "dl.svc.plus"
         path:
           - "/"
@@ -26,10 +32,16 @@
         path:
           - "/docs/"
           - "/download/"
+          - "/login/"
+          - "/logout/"
+          - '/register/'
       - name: "cn-homepage.svc.plus"
         path:
           - "/docs/"
           - "/download/"
+          - "/login/"
+          - "/logout/"
+          - '/register/'
       - name: "dl.svc.plus"
         path:
           - "/"
