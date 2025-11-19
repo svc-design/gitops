@@ -4,7 +4,7 @@ kind: Secret
 metadata:
   name: 'example-pulp-admin-password'
 stringData:
-  password: 'a4h3ljbn'
+  password: ''
 ---
 apiVersion: v1
 kind: ConfigMap
