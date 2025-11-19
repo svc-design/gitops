@@ -41,6 +41,20 @@ packages:
   - uidmap
   - fuse-overlayfs
 
+# S3FS 挂载配置（可选）
+s3fs_enable: false
+s3fs_config:
+  bucket: ""                    # S3 存储桶名称
+  mount_point: ""              # 挂载点路径，例如：/data/update-server/
+  access_key: ""               # AWS Access Key ID
+  secret_key: ""               # AWS Secret Access Key
+  url: "https://s3.amazonaws.com"  # S3 端点 URL
+  region: "us-east-1"          # S3 区域
+  passwd_file: "~/.passwd-s3fs"  # 密码文件路径
+  use_path_request_style: true    # 是否使用路径请求样式
+  allow_other: true            # 是否允许其他用户访问
+  nonempty: false              # 是否允许挂载到非空目录
+
 
     #config_temp:
     #  k8s-node:

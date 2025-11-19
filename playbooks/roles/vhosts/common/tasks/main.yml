@@ -28,6 +28,11 @@
       when: install_packages | bool
       tags: [pkgs, baseline]
 
+    - name: "Common | S3FS 挂载"
+      ansible.builtin.include_tasks: configure_s3fs.yml
+      when: s3fs_enable | bool
+      tags: [s3fs, mount]
+
 #- name: Include GPU Configuration
 #  include_tasks: include_gpu.yaml
 #  when: (ansible_facts['distribution'] == "Ubuntu") or (ansible_facts['distribution'] == "Debian")
