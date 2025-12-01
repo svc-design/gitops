@@ -1,0 +1,12 @@
+- name: setup zitadel
+  hosts: "{{ zitadel_target_host }}"
+  become: true
+  vars:
+    zitadel_target_host: auth.svc.plus
+    zitadel_domain: "{{ zitadel_target_host }}"
+    zitadel_masterkey: MasterkeyNeedsToHave32Characters
+    zitadel_workspace: /opt/zitadel
+  roles:
+    - roles/vhosts/common/
+    - roles/vhosts/docker/
+    - roles/docker/zitadel/
