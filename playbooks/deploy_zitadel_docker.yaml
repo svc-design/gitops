@@ -7,6 +7,6 @@
     zitadel_masterkey: MasterkeyNeedsToHave32Characters
     zitadel_workspace: /opt/zitadel
   roles:
-    - roles/vhosts/common/
-    - roles/vhosts/docker/
-    - roles/docker/zitadel/
+    - vhosts/common/
+    - vhosts/docker/
+    - docker/zitadel/
