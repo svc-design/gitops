@@ -21,3 +21,8 @@ files/
 - `zitadel_workspace`: `{{ zitadel_deploy_dir }}`
 - `zitadel_domain`: `auth.svc.plus`
 - `zitadel_masterkey`: `MasterkeyNeedsToHave32Characters`
+
+## RUN
+
+ansible-playbook -i inventory.ini deploy_zitadel_docker.yaml -e "domain=auth.svc.plus" -D -C -l auth.svc.plus
+ansible-playbook -i inventory.ini deploy_zitadel_docker.yaml -e "domain=auth.svc.plus" -D -l auth.svc.plus
