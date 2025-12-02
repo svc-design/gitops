@@ -129,7 +129,7 @@ services:
     restart: unless-stopped
     volumes:
       - "{{ zitadel_workspace }}/nginx/nginx.conf:/etc/nginx/nginx.conf"
-      - "{{ zitadel_workspace }}/nginx/conf.d:/etc/nginx/conf.d:ro"
+      - "{{ zitadel_workspace }}/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro"
       - "{{ zitadel_workspace }}/certbot/conf:/etc/letsencrypt"
       - "{{ zitadel_workspace }}/certbot/www:/var/www/certbot"
     ports:
@@ -141,7 +141,27 @@ services:
       zitadel-external-tls:
         condition: service_healthy
 
+  bootstrap-nginx:
+    profiles: ["bootstrap"]
+    image: nginx:mainline-alpine
+    container_name: bootstrap-nginx
+    volumes:
+      - "{{ zitadel_workspace }}/certbot/www:/var/www/certbot"
+      - "{{ zitadel_workspace }}/certbot/conf:/etc/letsencrypt"
+      - "{{ zitadel_workspace }}/nginx/nginx.conf:/etc/nginx/nginx.conf"
+      - "{{ zitadel_workspace }}/nginx/conf.d/bootstrap-nginx.conf:/etc/nginx/conf.d/bootstrap-nginx.conf"
+    ports:
+      - "80:80"       # 暂时只占用80
+    networks:
+      - app
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost"]
+      interval: 3s
+      timeout: 2s
+      retries: 10
+      start_period: 3s
   certbot:
+    profiles: ["bootstrap"]
     image: certbot/certbot
     container_name: certbot
     command: >
@@ -150,13 +170,12 @@ services:
       --email manbuzhe2009@qq.com
       --agree-tos
       --no-eff-email
+      --keep-until-expiring
+      --non-interactive
       -d {{ zitadel_domain }}
     volumes:
       - "{{ zitadel_workspace }}/certbot/conf:/etc/letsencrypt"
       - "{{ zitadel_workspace }}/certbot/www:/var/www/certbot"
-    depends_on:
-      proxy-external-tls:
-        condition: service_started
     networks:
       - app
 
