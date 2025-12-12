@@ -1,61 +1,136 @@
-name: Bootstrap Environment
+name: Bootstrap Environment Orchestrator
 
 on:
   workflow_dispatch:
     inputs:
-      domain:
+      env:
+        description: "Environment lifecycle (dev / staging / prod)"
         required: true
         type: string
 
+      workspace:
+        description: "Workspace / region / cluster (e.g. cn-shanghai)"
+        required: true
+        type: string
+
+      identity_playbook:
+        description: "Identity service deployment playbook"
+        required: false
+        default: "deploy_zitadel_docker.yaml"
+        type: choice
+        options:
+          - deploy_zitadel_docker.yaml
+          - deploy_keycloak_docker.yaml
+          - skip
+
+env:
+  DISPATCH_TOKEN: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
+
 jobs:
-  step1-check-iaas:
-    name: Step 1 - Check IaaS Ready
+
+  # =================================================
+  # Step 1: Preflight - Infrastructure Readiness
+  # =================================================
+  preflight-infra:
+    name: Preflight - Infrastructure Readiness
     runs-on: ubuntu-latest
+
     steps:
-      - name: Trigger IaaS check
-        uses: peter-evans/workflow-dispatch@v2
+      - name: Dispatch infrastructure readiness check
+        uses: peter-evans/repository-dispatch@v4
         with:
+          token: ${{ env.DISPATCH_TOKEN }}
           repository: cloud-neutral-toolkit/Modern-Container-Application-Reference-Architecture
-          workflow: check-iaas-ready.yaml
-          token: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
-          inputs: |
-            domain: ${{ inputs.domain }}
+          event-type: bootstrap.preflight.infra
+          client-payload: |
+            {
+              "env": "${{ inputs.env }}",
+              "workspace": "${{ inputs.workspace }}"
+            }
 
-  step2-check-xcontrol:
-    name: Step 2 - Check XControl Image
-    needs: step1-check-iaas
+  # =================================================
+  # Step 2: Preflight - Artifact / Image Check
+  # =================================================
+  preflight-artifacts:
+    name: Preflight - Artifact & Image Check
+    needs: preflight-infra
     runs-on: ubuntu-latest
+
     steps:
-      - name: Trigger XControl image check
-        uses: peter-evans/workflow-dispatch@v2
+      - name: Dispatch artifact validation
+        uses: peter-evans/repository-dispatch@v4
         with:
+          token: ${{ env.DISPATCH_TOKEN }}
           repository: cloud-neutral-toolkit/XControl
-          workflow: check-xcontrol-image.yaml
-          token: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
+          event-type: bootstrap.preflight.artifacts
+          client-payload: |
+            {
+              "env": "${{ inputs.env }}",
+              "workspace": "${{ inputs.workspace }}"
+            }
 
-  step3-ansible-deploy:
-    name: Step 3 - Ansible Deploy
-    needs: step2-check-xcontrol
+  # =================================================
+  # Step 3: Provision - Runtime & Core Services
+  # =================================================
+  provision-runtime:
+    name: Provision - Runtime & Core Services
+    needs: preflight-artifacts
     runs-on: ubuntu-latest
+
+    env:
+      ENV: ${{ inputs.env }}
+      WORKSPACE: ${{ inputs.workspace }}
+      IDENTITY_PLAYBOOK: ${{ inputs.identity_playbook }}
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout deployment repository
+        uses: actions/checkout@v4
 
       - name: Install Ansible
         run: |
           sudo apt-get update
           sudo apt-get install -y ansible
 
-      - name: DNS Register
+      # -----------------------------
+      # DNS
+      # -----------------------------
+      - name: Register DNS Records
         run: |
-          cd playbooks
-          ansible-playbook -i inventory.ini alicloud_dns_record.yml -D -C -l host.domain
+          ansible-playbook \
+            -i inventory/${ENV}/${WORKSPACE}/hosts.ini \
+            playbooks/alicloud_dns_record.yml \
+            --extra-vars "env=${ENV} workspace=${WORKSPACE}" \
+            -D -C
 
-      - name: Setup Docker
+      # -----------------------------
+      # Runtime / Base Layer
+      # -----------------------------
+      - name: Provision Runtime (Docker / Base Services)
         run: |
-          cd playbooks
-          ansible-playbook -i inventory.ini setup-docker.yml -D -C -l host.domain
+          ansible-playbook \
+            -i inventory/${ENV}/${WORKSPACE}/hosts.ini \
+            playbooks/setup-docker.yml \
+            --extra-vars "env=${ENV} workspace=${WORKSPACE}" \
+            -D -C
 
-      - name: Deploy ZITADEL
+      # -----------------------------
+      # Identity (pluggable)
+      # -----------------------------
+      - name: Deploy or Update Identity Service
+        if: ${{ env.IDENTITY_PLAYBOOK != 'skip' }}
         run: |
-          cd playbooks
-          ansible-playbook -i inventory.ini deploy_zitadel_docker.yaml -D -C -l host.domain
+          ansible-playbook \
+            -i inventory/${ENV}/${WORKSPACE}/hosts.ini \
+            playbooks/${IDENTITY_PLAYBOOK} \
+            --extra-vars "env=${ENV} workspace=${WORKSPACE}" \
+            -D -C
+
+      # -----------------------------
+      # Post-check
+      # -----------------------------
+      - name: Post-Provision Status Check
+        run: |
+          ansible-playbook \
+            -i inventory/${ENV}/${WORKSPACE}/hosts.ini \
+            playbooks/check-runtime-status.yml \
+            --extra-vars "env=${ENV} workspace=${WORKSPACE}"
