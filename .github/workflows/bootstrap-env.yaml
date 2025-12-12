@@ -17,7 +17,7 @@ jobs:
         with:
           repository: cloud-neutral-toolkit/Modern-Container-Application-Reference-Architecture
           workflow: check-iaas-ready.yaml
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
           inputs: |
             domain: ${{ inputs.domain }}
 
@@ -31,7 +31,7 @@ jobs:
         with:
           repository: cloud-neutral-toolkit/XControl
           workflow: check-xcontrol-image.yaml
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CROSS_REPO_DISPATCH_TOKEN }}
 
   step3-ansible-deploy:
     name: Step 3 - Ansible Deploy
