@@ -1,0 +1,61 @@
+name: Bootstrap Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      domain:
+        required: true
+        type: string
+
+jobs:
+  step1-check-iaas:
+    name: Step 1 - Check IaaS Ready
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger IaaS check
+        uses: peter-evans/workflow-dispatch@v2
+        with:
+          repository: cloud-neutral-toolkit/Modern-Container-Application-Reference-Architecture
+          workflow: check-iaas-ready.yaml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          inputs: |
+            domain: ${{ inputs.domain }}
+
+  step2-check-xcontrol:
+    name: Step 2 - Check XControl Image
+    needs: step1-check-iaas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger XControl image check
+        uses: peter-evans/workflow-dispatch@v2
+        with:
+          repository: cloud-neutral-toolkit/XControl
+          workflow: check-xcontrol-image.yaml
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  step3-ansible-deploy:
+    name: Step 3 - Ansible Deploy
+    needs: step2-check-xcontrol
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Ansible
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ansible
+
+      - name: DNS Register
+        run: |
+          cd playbooks
+          ansible-playbook -i inventory.ini alicloud_dns_record.yml -D -C -l host.domain
+
+      - name: Setup Docker
+        run: |
+          cd playbooks
+          ansible-playbook -i inventory.ini setup-docker.yml -D -C -l host.domain
+
+      - name: Deploy ZITADEL
+        run: |
+          cd playbooks
+          ansible-playbook -i inventory.ini deploy_zitadel_docker.yaml -D -C -l host.domain
