@@ -13,8 +13,9 @@ spec:
         control_plane: cloudflare-dns
         ttl_seconds: 60
         canonical_records:
-          console.svc.plus: console-serverless-prod.svc.plus
           accounts.svc.plus: accounts-serverless-prod.svc.plus
+          xworktech.com: frontend-router-prod.manbuzhe2008.workers.dev
+          www.xworktech.com: frontend-router-prod.manbuzhe2008.workers.dev
       load-balancer:
         strategy: dns-only
       weight:
@@ -93,11 +94,13 @@ spec:
     # Both production console hostnames are custom domains of the same
     # Frontend Router Worker. Pages remains the static asset origin.
     console_aliases:
+      - console.svc.plus
       - console-serverless-prod.xworktech.com
     accounts_host: accounts-serverless-prod.svc.plus
     billing_host: billing-serverless-prod.svc.plus
     frontend_router:
       worker_name: frontend-router-prod
+      worker_url: https://frontend-router-prod.manbuzhe2008.workers.dev
       host: console-serverless-prod.svc.plus
       pages_origin: https://ai-workspace-portal-prod.pages.dev
       api_origin: https://accounts-serverless-prod.svc.plus
