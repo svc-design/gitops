@@ -90,15 +90,17 @@ spec:
     database: self-managed-postgresql
   serverless:
     console_host: console-serverless-prod.svc.plus
-    # Production UI hostnames are direct custom domains of Frontend Router.
-    # www must serve in place, without redirecting to console.xworktech.com.
-    console_aliases:
-      - console-serverless-prod.xworktech.com
-      - www.xworktech.com
     accounts_host: accounts-serverless-prod.svc.plus
     billing_host: billing-serverless-prod.svc.plus
     frontend_router:
       worker_name: frontend-router-prod
+      # Brand domains serve only the homepage; platform navigation uses svc.plus.
+      website:
+        zone_name: xworktech.com
+        hosts:
+          - xworktech.com
+          - www.xworktech.com
+        platform_origin: https://svc.plus
       host: console-serverless-prod.svc.plus
       pages_origin: https://ai-workspace-portal-prod.pages.dev
       api_origin: https://accounts-serverless-prod.svc.plus
