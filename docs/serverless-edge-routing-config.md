@@ -123,6 +123,10 @@ The production naming contract follows the same shape:
 Production must be introduced through its own environment-scoped declaration and PR; the UAT
 file does not enable production traffic.
 
+The production Frontend Router Worker also owns the declared custom-domain aliases
+`console-serverless-prod.xworktech.com` and `www.xworktech.com`. Requests to either hostname
+retain that hostname at the edge; neither alias is redirected to `console.xworktech.com`.
+
 ## Database handover and async DTS reservation
 
 `spec.runtime.data` reserves both database targets:
