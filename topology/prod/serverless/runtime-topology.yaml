@@ -14,8 +14,6 @@ spec:
         ttl_seconds: 60
         canonical_records:
           accounts.svc.plus: accounts-serverless-prod.svc.plus
-          xworktech.com: frontend-router-prod.manbuzhe2008.workers.dev
-          www.xworktech.com: frontend-router-prod.manbuzhe2008.workers.dev
       load-balancer:
         strategy: dns-only
       weight:
@@ -91,8 +89,12 @@ spec:
     database: self-managed-postgresql
   serverless:
     console_host: console-serverless-prod.svc.plus
-    # Both production console hostnames are custom domains of the same
-    # Frontend Router Worker. Pages remains the static asset origin.
+    # All production console entrypoints below are custom domains of the same
+    # Frontend Router Worker. Pages remains the static asset origin. These
+    # aliases preserve the hostname entered by the user; they are not redirects
+    # to console.xworktech.com.
+    # Production UI hostnames are direct custom domains of Frontend Router.
+    # www must serve in place, without redirecting to console.xworktech.com.
     console_aliases:
       - console.svc.plus
       - console-serverless-prod.xworktech.com
@@ -102,6 +104,12 @@ spec:
       worker_name: frontend-router-prod
       worker_url: https://frontend-router-prod.manbuzhe2008.workers.dev
       host: console-serverless-prod.svc.plus
+      website:
+        hosts:
+          - xworktech.com
+          - www.xworktech.com
+        zone_name: xworktech.com
+        platform_origin: https://svc.plus
       pages_origin: https://ai-workspace-portal-prod.pages.dev
       api_origin: https://accounts-serverless-prod.svc.plus
       static_cache_ttl: 604800

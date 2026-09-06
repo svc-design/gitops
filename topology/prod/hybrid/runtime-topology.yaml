@@ -32,8 +32,6 @@ spec:
         # targets; it does not switch them.
         canonical_records:
           accounts.svc.plus: accounts-serverless-prod.svc.plus
-          xworktech.com: frontend-router-prod.manbuzhe2008.workers.dev
-          www.xworktech.com: frontend-router-prod.manbuzhe2008.workers.dev
       load-balancer:
         # Request-scoped failover inside the edge-gateway Worker: no health
         # checks, no state, no control loop — a single request that the selfhost
@@ -126,6 +124,7 @@ spec:
     database: self-managed-postgresql
   serverless:
     console_host: console-serverless-prod.svc.plus
+    # Keep the shared frontend aliases aligned with serverless mode.
     console_aliases:
       - console.svc.plus
       - console-serverless-prod.xworktech.com
@@ -138,6 +137,12 @@ spec:
       worker_name: frontend-router-prod
       worker_url: https://frontend-router-prod.manbuzhe2008.workers.dev
       host: console-serverless-prod.svc.plus
+      website:
+        hosts:
+          - xworktech.com
+          - www.xworktech.com
+        zone_name: xworktech.com
+        platform_origin: https://svc.plus
       pages_origin: https://ai-workspace-portal-prod.pages.dev
       api_origin: https://accounts-serverless-prod.svc.plus
       static_cache_ttl: 604800

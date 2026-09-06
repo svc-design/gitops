@@ -123,6 +123,10 @@ The production naming contract follows the same shape:
 Production must be introduced through its own environment-scoped declaration and PR; the UAT
 file does not enable production traffic.
 
+The production Frontend Router Worker also owns the declared custom-domain aliases
+`console-serverless-prod.xworktech.com` and `www.xworktech.com`. Requests to either hostname
+retain that hostname at the edge; neither alias is redirected to `console.xworktech.com`.
+
 ## Database handover and async DTS reservation
 
 `spec.runtime.data` reserves both database targets:
@@ -150,11 +154,17 @@ Consumers must read this GitOps declaration rather than repository-local environ
 - `spec.runtime` defines mode, routing, services, and data handover;
 - `spec.domains` defines the canonical Console/Accounts aliases;
 - `spec.serverless.console_aliases` lists extra hostnames that still reach the Console and must
-  therefore stay in the accounts CORS allowlist; it creates no DNS record and takes part in no
-  traffic switch, unlike the canonical aliases above;
+  therefore stay in the accounts CORS allowlist. For the serverless deployment, each declared
+  alias is also reconciled as a Custom Domain of the Frontend Router Worker; the request keeps
+  its original hostname and is not redirected to a console alias. The declaration itself does
+  not perform the customer-facing DNS cutover;
 - `spec.public_endpoints` defines the five mode-qualified public service entrances and access
   contracts (`public`, `authenticated`, `public_uuid`);
 - `spec.cloudflare` defines the Pages project, zone, and static_cdn_url (direct Pages origin for SIT/UAT, dedicated assets domain for PROD);
+- Production `console_aliases` includes `www.xworktech.com` as a direct custom domain
+  of `frontend-router-prod`, in both serverless and hybrid topology. The domains
+  job reconciles aliases even with `dns_mode=none`; the website must remain at
+  `www.xworktech.com` without redirecting to `console.xworktech.com`.
 - `spec.serverless.frontend_router` defines the Console Worker Custom Domain, Pages/API origins,
   static prefixes, `static_cache_ttl` (defaults to 168 hours = 604,800s), `public_cache_ttl`
   (defaults to 1 hour = 3,600s), the `api_auth` Edge Gateway Service Binding, and the five SSR Service Bindings;
