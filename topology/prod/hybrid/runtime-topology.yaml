@@ -31,7 +31,6 @@ spec:
         # the selfhost targets declared under spec.domains. GitOps declares both
         # targets; it does not switch them.
         canonical_records:
-          console.svc.plus: console-serverless-prod.svc.plus
           accounts.svc.plus: accounts-serverless-prod.svc.plus
       load-balancer:
         # Request-scoped failover inside the edge-gateway Worker: no health
@@ -127,8 +126,8 @@ spec:
     console_host: console-serverless-prod.svc.plus
     # Keep the shared frontend aliases aligned with serverless mode.
     console_aliases:
+      - console.svc.plus
       - console-serverless-prod.xworktech.com
-      - www.xworktech.com
     accounts_host: accounts-serverless-prod.svc.plus
     billing_host: billing-serverless-prod.svc.plus
     # Deployed and owned by serverless-orchestrator. Declared here because the
@@ -136,7 +135,14 @@ spec:
     # edge chain: a mode flip must never redeploy or reconfigure the frontend.
     frontend_router:
       worker_name: frontend-router-prod
+      worker_url: https://frontend-router-prod.manbuzhe2008.workers.dev
       host: console-serverless-prod.svc.plus
+      website:
+        hosts:
+          - xworktech.com
+          - www.xworktech.com
+        zone_name: xworktech.com
+        platform_origin: https://svc.plus
       pages_origin: https://ai-workspace-portal-prod.pages.dev
       api_origin: https://accounts-serverless-prod.svc.plus
       static_cache_ttl: 604800
