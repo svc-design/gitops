@@ -90,6 +90,10 @@ spec:
     database: self-managed-postgresql
   serverless:
     console_host: console-serverless-prod.svc.plus
+    # All production console entrypoints below are custom domains of the same
+    # Frontend Router Worker. Pages remains the static asset origin. These
+    # aliases preserve the hostname entered by the user; they are not redirects
+    # to console.xworktech.com.
     # Production UI hostnames are direct custom domains of Frontend Router.
     # www must serve in place, without redirecting to console.xworktech.com.
     console_aliases:
