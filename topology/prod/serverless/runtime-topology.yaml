@@ -94,6 +94,8 @@ spec:
     # Frontend Router Worker. Pages remains the static asset origin. These
     # aliases preserve the hostname entered by the user; they are not redirects
     # to console.xworktech.com.
+    # Production UI hostnames are direct custom domains of Frontend Router.
+    # www must serve in place, without redirecting to console.xworktech.com.
     console_aliases:
       - console-serverless-prod.xworktech.com
       - www.xworktech.com

@@ -125,6 +125,10 @@ spec:
     database: self-managed-postgresql
   serverless:
     console_host: console-serverless-prod.svc.plus
+    # Keep the shared frontend aliases aligned with serverless mode.
+    console_aliases:
+      - console-serverless-prod.xworktech.com
+      - www.xworktech.com
     accounts_host: accounts-serverless-prod.svc.plus
     billing_host: billing-serverless-prod.svc.plus
     # Deployed and owned by serverless-orchestrator. Declared here because the
