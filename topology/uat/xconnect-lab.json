@@ -16,10 +16,26 @@
       "source_of_truth": "formal-accounts-api-and-portal",
       "config_contract": "devices-networks-policy-signed-config",
       "lab_controller": {
-        "enabled": true,
-        "co_located_on": "gateway",
-        "purpose": "temporary-enrollment-compatibility-harness-until-uat-invites-are-seeded",
+        "enabled": false,
+        "purpose": "retired-formal-accounts-api-is-authoritative",
         "is_formal_config_source": false
+      }
+    },
+    "artifacts": {
+      "gateway": {
+        "repository": "ai-workspace-xstream/XConnect-Gateway",
+        "release_tag": "v0.1.2",
+        "asset": "xconnect-gateway-linux-arm64"
+      },
+      "one": {
+        "repository": "ai-workspace-xstream/XConnect-One",
+        "release_tag": "v0.1.2",
+        "asset": "xconnect-linux-arm64"
+      },
+      "xray": {
+        "repository": "XTLS/Xray-core",
+        "release_tag": "v26.3.27",
+        "asset": "Xray-linux-arm64-v8a.zip"
       }
     },
     "nodes": {
