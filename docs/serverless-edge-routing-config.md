@@ -67,13 +67,13 @@ runtime profile declares five mode-qualified public service entrances using the 
 
 | Canonical hostname | Selfhost CNAME | Serverless CNAME |
 | --- | --- | --- |
-| `console-cloudflare-uat.onwalk.net` | `console-selfhost-uat.onwalk.net` | `console-serverless-uat.onwalk.net` |
-| `accounts-cloudflare-uat.onwalk.net` | `accounts-selfhost-uat.onwalk.net` | `accounts-serverless-uat.onwalk.net` |
+| `console-uat.onwalk.net` | `console-selfhost-uat.onwalk.net` | `console-serverless-uat.onwalk.net` |
+| `accounts-uat.onwalk.net` | `accounts-selfhost-uat.onwalk.net` | `accounts-serverless-uat.onwalk.net` |
 
 | Service | Access contract | Serverless UAT entrance |
 | --- | --- | --- |
-| Console | public | `console-cloudflare-uat.onwalk.net` |
-| Accounts | authenticated | `accounts-cloudflare-uat.onwalk.net` |
+| Console | public | `console-serverless-uat.onwalk.net` |
+| Accounts | authenticated | `accounts-serverless-uat.onwalk.net` |
 | Billing | authenticated | `billing-serverless-uat.onwalk.net` |
 | PostgreSQL | authenticated | `postgresql-serverless-uat.onwalk.net` |
 | Agent-Proxy | public UUID with internal validation | `agent-proxy-serverless-uat.onwalk.net` |
@@ -111,7 +111,10 @@ into a monolithic Worker.
 The canonical names and complete route suffixes are declared in `spec.serverless.frontend_router`,
 `spec.serverless.ssr`, and `spec.serverless.edge_gateway`; the table is a human-readable summary
 of that contract. The canonical Console and Accounts DNS names remain stable traffic-switch aliases;
-the five mode-qualified hosts in `spec.public_endpoints` are the service-specific public entrances.
+the five mode-qualified hosts in `spec.public_endpoints` are the service-specific internal entrances.
+For UAT browser OAuth, `console-cloudflare-uat.onwalk.net` and
+`accounts-cloudflare-uat.onwalk.net` are the external Cloudflare custom domains declared under
+`spec.serverless.console_aliases` and `spec.serverless.accounts_aliases`.
 
 The production naming contract follows the same shape:
 
