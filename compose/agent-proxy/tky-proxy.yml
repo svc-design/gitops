@@ -1,0 +1,15 @@
+---
+# tky-proxy.svc.plus Caddy resource policy
+#
+# Evidence window: 2026-08-26 through 2026-08-28, from the
+# process-exporter dashboard. Caddy RSS was normally 130-210 MiB and peaked
+# close to 320 MiB. The Go heap target stays below cgroup pressure; the 64 MiB
+# margin absorbs non-heap allocations and short traffic bursts.
+tky_proxy_caddy_go_memory_limit: 200MiB
+tky_proxy_caddy_memory_high: 320M
+tky_proxy_caddy_memory_max: 384M
+
+# The largest observed Referer value was 1,079 bytes. 32 KiB leaves protocol
+# headroom while replacing Caddy's 1 MiB default request-header allowance.
+caddy_max_header_size: 32KiB
+caddy_read_header_timeout: 10s
