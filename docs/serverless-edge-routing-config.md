@@ -67,13 +67,13 @@ runtime profile declares five mode-qualified public service entrances using the 
 
 | Canonical hostname | Selfhost CNAME | Serverless CNAME |
 | --- | --- | --- |
-| `console-uat.onwalk.net` | `console-selfhost-uat.onwalk.net` | `console-serverless-uat.onwalk.net` |
-| `accounts-uat.onwalk.net` | `accounts-selfhost-uat.onwalk.net` | `accounts-serverless-uat.onwalk.net` |
+| `console-cloudflare-uat.onwalk.net` | `console-selfhost-uat.onwalk.net` | `console-serverless-uat.onwalk.net` |
+| `accounts-cloudflare-uat.onwalk.net` | `accounts-selfhost-uat.onwalk.net` | `accounts-serverless-uat.onwalk.net` |
 
 | Service | Access contract | Serverless UAT entrance |
 | --- | --- | --- |
-| Console | public | `console-serverless-uat.onwalk.net` |
-| Accounts | authenticated | `accounts-serverless-uat.onwalk.net` |
+| Console | public | `console-cloudflare-uat.onwalk.net` |
+| Accounts | authenticated | `accounts-cloudflare-uat.onwalk.net` |
 | Billing | authenticated | `billing-serverless-uat.onwalk.net` |
 | PostgreSQL | authenticated | `postgresql-serverless-uat.onwalk.net` |
 | Agent-Proxy | public UUID with internal validation | `agent-proxy-serverless-uat.onwalk.net` |
@@ -97,15 +97,15 @@ into a monolithic Worker.
 
 | Boundary | Worker / Pages project | Routes | Deployment unit |
 | --- | --- | --- | --- |
-| Frontend Router | `frontend-router-uat` | `console-serverless-uat.onwalk.net/*` | Console Custom Domain owner; static/API/SSR dispatcher |
+| Frontend Router | `frontend-router-uat` | `console-cloudflare-uat.onwalk.net/*` | Console Custom Domain owner; static/API/SSR dispatcher |
 | SSR public pages | `frontend-ssr-public-uat` | Router Service Binding fallback | Independent lightweight Worker |
 | SSR content pages | `frontend-ssr-content-uat` | `/blogs*`, `/docs*`, `/download*` | Independent lightweight Worker |
 | SSR identity pages | `frontend-ssr-auth-uat` | `/login*`, `/register*`, etc. | Independent lightweight Worker |
 | SSR console | `frontend-ssr-console-uat` | `/panel*`, `/dashboard*` | Independent lightweight Worker |
 | SSR workspace | `frontend-ssr-workspace-uat` | `/ai-workspace*`, `/editor*`, etc. | Independent lightweight Worker |
-| API auth | `edge-gateway-auth-uat` | `accounts-serverless-uat.onwalk.net/api/auth/*`, `/api/v1/auth/*` | Independent lightweight Worker |
-| API admin | `edge-gateway-admin-uat` | `accounts-serverless-uat.onwalk.net/api/admin/*` | Independent lightweight Worker |
-| Edge Gateway Router Core | `edge-gateway-core-uat` | `accounts-serverless-uat.onwalk.net` Custom Domain owner; `/api/*` fallback | Accounts entry owner and independent lightweight Worker |
+| API auth | `edge-gateway-auth-uat` | `accounts-cloudflare-uat.onwalk.net/api/auth/*`, `/api/v1/auth/*` | Independent lightweight Worker |
+| API admin | `edge-gateway-admin-uat` | `accounts-cloudflare-uat.onwalk.net/api/admin/*` | Independent lightweight Worker |
+| Edge Gateway Router Core | `edge-gateway-core-uat` | `accounts-cloudflare-uat.onwalk.net` Custom Domain owner; `/api/*` fallback | Accounts entry owner and independent lightweight Worker |
 | Static assets | `ai-workspace-portal-uat` | `PAGES_ORIGIN` for `/_next/*`, `/static/*`, `/assets/*` | Pages deployment |
 
 The canonical names and complete route suffixes are declared in `spec.serverless.frontend_router`,
