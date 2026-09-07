@@ -1,0 +1,27 @@
+{
+  "apiVersion": "gitops.svc.plus/v1alpha1",
+  "kind": "XConnectLabTopology",
+  "metadata": {"name": "xconnect-lab", "environment": "sit"},
+  "spec": {
+    "ttl_minutes": 90,
+    "aws": {
+      "region": "ap-northeast-1",
+      "instance_type": "t3.small",
+      "vpc_cidr": "10.78.0.0/24",
+      "ami_ssm_parameter": "/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id",
+      "role_arn": "arn:aws:iam::950604983695:role/GithubAction_IAC_Deploy_Role",
+      "account_id": "950604983695",
+      "audience": "sts.amazonaws.com"
+    },
+    "vultr": {"region": "nrt", "plan": "vc2-1c-1gb", "os_name": "Ubuntu 24.04 LTS x64"},
+    "overlay": {"network_id": "net_lab", "cidr": "10.77.0.0/24", "gateway_address": "10.77.0.1/24", "device_address": "10.77.0.2/32", "transport": "vless-tls-xudp", "public_port": 443, "zero_port": 8443, "wireguard_port": 51820},
+    "vault": {
+      "address": "https://vault.svc.plus",
+      "role": "github-actions-platform-ops-toolkit-sit",
+      "audience": "vault",
+      "infrastructure_path": "kv/data/CICD/sit",
+      "runtime_path": "kv/data/sit/xconnect-one",
+      "github_app_path": "kv/data/CICD/github-app/daily-snapshot"
+    }
+  }
+}
