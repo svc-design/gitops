@@ -3,6 +3,7 @@
   "kind": "XConnectLabTopology",
   "metadata": {"name": "xconnect-lab", "environment": "sit"},
   "spec": {
+    "gateway_execution_model": "self-hosted-vps-or-ec2-only",
     "ttl_minutes": 90,
     "aws": {
       "region": "ap-northeast-1",
