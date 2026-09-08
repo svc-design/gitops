@@ -3,7 +3,7 @@
   "kind": "XConnectTransportLabTopology",
   "metadata": {"name": "xconnect-transport-lab", "environment": "uat"},
   "spec": {
-    "iac_module": "vpn-overlay/xconnect-transport-lab",
+    "iac_module": "vpn-overlay/xconnect-lab",
     "purpose": "validate-four-node-wireguard-over-vless-before-zero-enrollment",
     "ttl_minutes": 60,
     "compute_policy": "all-cloud-compute-is-aws-spot-by-default",
