@@ -9,7 +9,11 @@
     "gateway_provider": "aws-spot",
     "gateway_execution_model": "independent-linux-node",
     "compute_policy": "all-cloud-compute-is-aws-spot-by-default",
-    "ttl_minutes": 60,
+    "ttl_minutes": 120,
+    "node_observation": {
+      "mode": "until-expiry",
+      "release_on_failure": true
+    },
     "zero": {
       "accounts_api_url": "https://accounts-uat.onwalk.net",
       "portal_url": "https://console-cloudflare-uat.onwalk.net/panel/xconnect-zero",
@@ -29,7 +33,7 @@
       },
       "one": {
         "repository": "ai-workspace-xstream/XConnect-One",
-        "release_tag": "v0.1.7",
+        "release_tag": "v0.1.8",
         "asset": "xconnect-linux-arm64"
       },
       "xray": {
@@ -49,7 +53,7 @@
         "vcpu": 2,
         "memory_gib": 2,
         "purchase_model": "spot",
-        "max_runtime_minutes": 60,
+        "max_runtime_minutes": 120,
         "services": ["xconnect-gateway", "wireguard", "xray"]
       },
       "one": {
@@ -61,7 +65,7 @@
         "vcpu": 2,
         "memory_gib": 1,
         "purchase_model": "spot",
-        "max_runtime_minutes": 60,
+        "max_runtime_minutes": 120,
         "services": ["xconnect-one-cli", "wireguard", "xray"]
       }
     },

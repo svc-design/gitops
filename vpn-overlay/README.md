@@ -23,7 +23,12 @@ runtime source of truth for devices, networks, policies, and signed configs.
 `uat/xconnect-lab.json` is the canonical disposable UAT declaration for the
 XConnect Zero → Gateway → One WireGuard-over-VLESS closure. It pins the two
 AWS Spot node shapes and release artifacts, while the workflow injects secrets
-only at runtime.
+only at runtime. The Gateway and controlled-client each have a two-hour maximum
+runtime. `spec.node_observation.mode: until-expiry` directs the default
+automation to retain both nodes for observation through their absolute
+`expires_at` after CI validation succeeds. `release_on_failure: true` permits
+earlier release when validation fails. AWS Spot capacity interruption can still
+terminate either node before expiry.
 
 ## Desktop acceptance stage
 
@@ -35,7 +40,7 @@ Only Gateway TCP 443 is exposed to those sources. SSH and public WireGuard UDP
 remain closed to desktops. Without an explicitly requested desktop window,
 the deployment must not activate this optional ingress.
 
-The window is at most 20 minutes and remains inside the existing one-hour
+The window is at most 20 minutes and remains inside the existing two-hour
 Spot lease. The public handoff contains only endpoint/instance metadata,
 device/network identifiers, the Gateway public key and the disposable CA
 certificate. Invitation tokens, VLESS credentials, owner identity and private
