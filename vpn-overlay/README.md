@@ -45,9 +45,14 @@ terminate either node before expiry.
 and Windows stage after the Linux check. It is disabled by default. To enable
 a reviewed run, set `enabled` and supply one or two exact public IPv4 `/32`
 source addresses in `ingress_cidrs`; never use a broad network or `0.0.0.0/0`.
-Only Gateway TCP 443 is exposed to those sources. SSH and public WireGuard UDP
-remain closed to desktops. Without an explicitly requested desktop window,
-the deployment must not activate this optional ingress.
+
+The cloud workflow accepts an optional, run-scoped
+`ssh_debug_ingress_cidrs` dispatch input for temporary operator debugging. The
+input is limited by the consumer to canonical IPv4 `/32` values and is not
+stored in GitOps. It adds only TCP 22 to both disposable nodes for that run;
+it does not open WireGuard UDP 51820 or change the desktop VLESS/TLS
+allowlist. The desktop VLESS/TLS list remains disabled unless an explicitly
+requested desktop window is enabled; public WireGuard UDP remains closed.
 
 The window is at most 20 minutes and remains inside the existing one-hour
 Spot lease. The public handoff contains only endpoint/instance metadata,
