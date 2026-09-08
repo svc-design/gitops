@@ -78,10 +78,6 @@
       "public_wireguard_ingress": false,
       "acceptance": ["formal-invite", "signed-sync-ack", "owned-runtime", "exact-peer-handshake", "private-ping", "exact-run-http-marker"]
     },
-    "debug_access": {
-      "ssh_ingress_cidrs": ["35.79.83.48/32"],
-      "purpose": "temporary operator SSH debugging; remove after UAT investigation"
-    },
     "aws": {
       "region": "ap-northeast-1",
       "reuse_default_vpc": true,
