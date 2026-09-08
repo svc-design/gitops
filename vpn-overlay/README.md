@@ -20,6 +20,15 @@ runtime source of truth for devices, networks, policies, and signed configs.
 
 ## Environments
 
+`uat/xconnect-transport-lab.json` is the first-stage, control-plane-free
+four-node WireGuard-over-VLESS validation declaration. It is intentionally
+separate from `uat/xconnect-lab.json`: it establishes the Gateway/Linux/
+Windows/macOS runtime and transport baseline before Accounts enrollment,
+signed configuration, policy and ACK are introduced. It declares only role,
+version-independent topology, Spot shape, TTL and non-sensitive addresses.
+Runtime private keys, disposable TLS material, VLESS identities and rendered
+peer files are generated on protected nodes or runners and never enter GitOps.
+
 `uat/xconnect-lab.json` is the canonical disposable UAT declaration for the
 XConnect Zero → Gateway → One WireGuard-over-VLESS closure. It pins the two
 AWS Spot node shapes and release artifacts, while the workflow injects secrets
