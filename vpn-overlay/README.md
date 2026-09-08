@@ -24,3 +24,25 @@ runtime source of truth for devices, networks, policies, and signed configs.
 XConnect Zero → Gateway → One WireGuard-over-VLESS closure. It pins the two
 AWS Spot node shapes and release artifacts, while the workflow injects secrets
 only at runtime.
+
+## Desktop acceptance stage
+
+`spec.desktop_validation` declares an optional, operator-run macOS (`darwin`)
+and Windows stage after the Linux check. It is disabled by default. To enable
+a reviewed run, set `enabled` and supply one or two exact public IPv4 `/32`
+source addresses in `ingress_cidrs`; never use a broad network or `0.0.0.0/0`.
+Only Gateway TCP 443 is exposed to those sources. SSH and public WireGuard UDP
+remain closed to desktops. Without an explicitly requested desktop window,
+the deployment must not activate this optional ingress.
+
+The window is at most 20 minutes and remains inside the existing one-hour
+Spot lease. The public handoff contains only endpoint/instance metadata,
+device/network identifiers, the Gateway public key and the disposable CA
+certificate. Invitation tokens, VLESS credentials, owner identity and private
+keys must never be included in that artifact or this repository.
+
+Gateway v0.1.4 fixes formal Accounts device-session renewal; the release is
+built by the Gateway project's own CI and downloaded by deployment. Desktop
+acceptance requires independent local sync/runtime, exact-peer handshake,
+private ping and exact-run HTTP checks. A Linux pass or a Gateway peer count
+does not certify either desktop.
