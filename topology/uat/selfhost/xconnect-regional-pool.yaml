@@ -1,0 +1,79 @@
+apiVersion: gitops.svc.plus/v1alpha1
+kind: XConnectRegionalPool
+metadata:
+  name: xconnect
+  project: svc.plus
+  environment: uat
+spec:
+  # GitOps owns the public regional contract. Terraform only creates the
+  # AWS instances and emits CMDB facts; playbooks install the edge agent.
+  lifecycle: terraform
+  provider: aws
+  scheduler:
+    implementation:
+      repository: git@github.com:ai-workspace-xstream/xconnect-edge-agent.git
+      deploy_when: multi-node
+    strategy: health-aware-weighted
+    failover_scope: region
+    health_check:
+      path: /healthz
+      interval_seconds: 30
+      unhealthy_after: 3
+      recover_after: 2
+  pools:
+    - name: jp
+      region: jpn-tky
+      entrypoint:
+        fqdn: jp-xconnect.onwalk.net
+        dns_record:
+          type: A
+          target_node: jp-01
+          ttl: 1
+          proxied: false
+      nodes:
+        - id: jp-01
+          node_id: ap-uat-tky
+          connection_source: terraform_cmdb
+          enabled: true
+          role: standalone
+          weight: 100
+    - name: hk
+      region: hk
+      entrypoint:
+        fqdn: hk-xconnect.onwalk.net
+        dns_record:
+          type: A
+          target_node: hk-01
+          ttl: 1
+          proxied: false
+      nodes:
+        - id: hk-01
+          node_id: ap-uat-hk
+          connection_source: terraform_cmdb
+          enabled: true
+          role: standalone
+          weight: 100
+    - name: us
+      region: us-ca
+      entrypoint:
+        fqdn: us-xconnect.onwalk.net
+        dns_record:
+          type: A
+          target_node: us-01
+          ttl: 1
+          proxied: false
+      nodes:
+        - id: us-01
+          node_id: ap-uat-us
+          connection_source: terraform_cmdb
+          enabled: true
+          role: standalone
+          weight: 100
+  connection_sources:
+    terraform_cmdb:
+      requires:
+        - node_id
+        - ip
+        - ansible_user
+        - instance_id
+      credentials: deployment_key
