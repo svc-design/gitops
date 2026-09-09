@@ -109,6 +109,15 @@
       "public_wireguard_ingress": false,
       "allowlist_source": "workflow-dispatch-runtime-only"
     },
+    "observability": {
+      "enabled": true,
+      "endpoint": "https://observability.svc.plus",
+      "metrics_query_path": "/vmetrics/api/v1/query",
+      "environment": "uat",
+      "collection": ["node_exporter", "process_exporter", "xconnect_textfile_metrics", "vector_remote_write"],
+      "metric_prefix": "xconnect_",
+      "credential_source": "vault:kv/data/CICD/observability"
+    },
     "vault": {
       "address": "https://vault.svc.plus",
       "role": "github-actions-platform-ops-toolkit-uat-xconnect-cloud-lab",
