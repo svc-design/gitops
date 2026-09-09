@@ -100,6 +100,15 @@
       "public_wireguard_ingress": false,
       "private_checks": ["ping", "http", "wireguard-handshake", "config-sync"]
     },
+    "gateway_transport": {
+      "enabled": true,
+      "exposure": "public-restricted",
+      "transport": "vless-tls-xudp",
+      "port": 443,
+      "ingress_cidrs": [],
+      "public_wireguard_ingress": false,
+      "allowlist_source": "workflow-dispatch-runtime-only"
+    },
     "vault": {
       "address": "https://vault.svc.plus",
       "role": "github-actions-platform-ops-toolkit-uat-xconnect-cloud-lab",
