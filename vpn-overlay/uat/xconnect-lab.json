@@ -33,7 +33,7 @@
       },
       "one": {
         "repository": "ai-workspace-xstream/XConnect-One",
-        "release_tag": "v0.1.9",
+        "release_tag": "v0.1.11",
         "asset": "xconnect-linux-arm64"
       },
       "xray": {
@@ -59,7 +59,7 @@
       "one": {
         "product": "XConnect One Linux client CLI",
         "role": "controlled-client",
-        "baseline": "independent-linux-node-external-wireguard-xray",
+        "baseline": "independent-linux-node-managed-xray-wireguard",
         "architecture": "arm64",
         "instance_type": "t4g.micro",
         "vcpu": 2,
