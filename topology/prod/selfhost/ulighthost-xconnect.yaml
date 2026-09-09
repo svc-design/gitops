@@ -44,7 +44,9 @@ spec:
       legacy_cname_target: jp-xconnect.svc.plus
       nodes:
         - id: jp-01
-          vault_key: jp-01
+          connection_source: terraform_cmdb
+          cmdb_selector:
+            node_id: ap-prod-tky
           enabled: true
           role: standalone
           weight: 100
@@ -56,9 +58,16 @@ spec:
         single_node_binding: direct
         multi_node_binding: scheduler
         scheduler_node: us-01
+        dns_record:
+          type: A
+          target_node: us-01
+          ttl: 1
+          proxied: false
       nodes:
         - id: us-01
-          vault_key: us-01
+          connection_source: terraform_cmdb
+          cmdb_selector:
+            node_id: ap-prod-us
           enabled: true
           role: standalone
           weight: 100
@@ -70,9 +79,16 @@ spec:
         single_node_binding: direct
         multi_node_binding: scheduler
         scheduler_node: hk-01
+        dns_record:
+          type: A
+          target_node: hk-01
+          ttl: 1
+          proxied: false
       nodes:
         - id: hk-01
-          vault_key: hk-01
+          connection_source: terraform_cmdb
+          cmdb_selector:
+            node_id: ap-prod-hk
           enabled: true
           role: standalone
           weight: 100
@@ -84,9 +100,13 @@ spec:
         single_node_binding: direct
         multi_node_binding: scheduler
         scheduler_node: ph-surfercloud-01
+        dns_record:
+          type: A
+          target_node: ph-surfercloud-01
+          ttl: 1
+          proxied: false
       nodes:
         - id: ph-surfercloud-01
-          vault_key: ph-surfercloud-01
           connection_source: vault
           # This manually provisioned node predates the aggregate
           # ulighthost-xconnect record. Keep only safe connection metadata in
@@ -99,6 +119,15 @@ spec:
           weight: 100
           provider: surfercloud
           product: ulighthost
+  connection_sources:
+    terraform_cmdb:
+      artifact: cmdb.json
+      required_fields: [ip, ansible_user, instance_id, node_id]
+      ssh_auth: deploy_key
+    vault:
+      engine_mount_point: kv
+      required_fields: [SSH_PASSWORD]
+      ssh_auth: password
   connection:
     vault_secret: kv/prod/ulighthost-xconnect
     secret_fields:
