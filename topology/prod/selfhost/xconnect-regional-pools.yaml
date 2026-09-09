@@ -5,10 +5,12 @@ metadata:
   project: svc.plus
   environment: prod
 spec:
-  lifecycle: manual
+  # AWS regions are declared in the IaC CMDB; PH remains a Vault-backed
+  # manually supplied edge. The runtime contract is one pool per region.
+  lifecycle: hybrid
   provisioning:
-    managed_by: manual
-    iac_status: planned
+    managed_by: mixed
+    iac_status: active_for_jp_hk_us
   entrypoint_defaults:
     dns_record:
       zone: svc.plus
@@ -26,16 +28,11 @@ spec:
       interval_seconds: 30
       unhealthy_after: 3
       recover_after: 2
-  aliases:
-    pools:
-      hp: ph
-    regions:
-      hp: ph-mnl
   pools:
     - name: jp
       region: jpn-tky
       entrypoint:
-        fqdn: JP-XConnect.svc.plus
+        fqdn: jp-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
@@ -43,62 +40,70 @@ spec:
       legacy_entrypoints:
         - fqdn: tky-proxy.svc.plus
           type: CNAME
-          target: JP-XConnect.svc.plus
+          target: jp-xconnect.svc.plus
       nodes:
         - id: jp-01
-          vault_key: jp-01
+          node_id: ap-prod-tky
+          connection_source: terraform_cmdb
           enabled: true
           role: standalone
           weight: 100
     - name: us
       region: us-ca
       entrypoint:
-        fqdn: US-XConnect.svc.plus
+        fqdn: us-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
         scheduler_node: us-01
       nodes:
         - id: us-01
-          vault_key: us-01
+          node_id: ap-prod-us
+          connection_source: terraform_cmdb
           enabled: true
           role: standalone
           weight: 100
     - name: hk
       region: hk
       entrypoint:
-        fqdn: HK-XConnect.svc.plus
+        fqdn: hk-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
         scheduler_node: hk-01
       nodes:
         - id: hk-01
-          vault_key: hk-01
+          node_id: ap-prod-hk
+          connection_source: terraform_cmdb
           enabled: true
           role: standalone
           weight: 100
     - name: ph
       region: ph-mnl
       entrypoint:
-        fqdn: PH-XConnect.svc.plus
+        fqdn: ph-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
-        scheduler_node: ph-surfercloud-01
+        scheduler_node: ph-01
       nodes:
-        - id: ph-surfercloud-01
-          vault_key: ph-surfercloud-01
-          provider: surfercloud
-          product: ulighthost
+        - id: ph-01
+          connection_source: vault
+          credentials_vault_path: prod/XConnect/PH
+          provider: external
           enabled: true
           role: standalone
           weight: 100
-  connection:
-    # Preserve the existing secret location; playbooks may override it with
-    # XCONNECT_VAULT_PATH during a future managed migration.
-    vault_secret: kv/prod/ulighthost-xconnect
-    secret_fields:
-      - public_ipv4
-      - ansible_user
-      - ansible_password
+  connection_sources:
+    terraform_cmdb:
+      requires:
+        - node_id
+        - ip
+        - ansible_user
+        - instance_id
+      credentials: deployment_key
+    vault:
+      requires:
+        - ansible_host
+        - ansible_user
+        - SSH_PASSWORD
