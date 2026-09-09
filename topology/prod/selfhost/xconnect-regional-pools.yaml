@@ -95,7 +95,9 @@ spec:
           role: standalone
           weight: 100
   connection:
-    vault_secret: kv/prod/xconnect-regional-nodes
+    # Preserve the existing secret location; playbooks may override it with
+    # XCONNECT_VAULT_PATH during a future managed migration.
+    vault_secret: kv/prod/ulighthost-xconnect
     secret_fields:
       - public_ipv4
       - ansible_user
