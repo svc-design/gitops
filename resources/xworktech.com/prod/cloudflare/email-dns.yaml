@@ -8,18 +8,15 @@ spec:
   provider: cloudflare
   # This policy is consumed by the playbook; CI must validate it before any apply.
   validation:
-    required_from_addresses: 4
     requires_single_apex_spf: true
     production_apply_requires_explicit_opt_in: true
   zone: xworktech.com
-  resend:
-    domain: xworktech.com
-    spf_include: include:amazonses.com
-    from_addresses:
-      - no-reply@xworktech.com
-      - support@xworktech.com
-      - billing@xworktech.com
-      - security@xworktech.com
+  # No resend block: transactional mail leaves through Google Workspace SMTP,
+  # and Resend was never actually reachable from this domain - none of its
+  # verification records ever existed in DNS. Declaring it kept amazonses.com in
+  # the apex SPF, authorising a sender that does not send, and made the
+  # reconciler depend on a Resend API key nothing else needs. Re-add the block
+  # when a Resend sender genuinely exists.
   google_workspace:
     mx:
       - {name: xworktech.com, type: MX, content: aspmx.l.google.com, priority: 1}
