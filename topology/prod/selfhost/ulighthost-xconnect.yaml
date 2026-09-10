@@ -36,7 +36,11 @@ spec:
         multi_node_binding: scheduler
         scheduler_node: jp-01
         dns_record:
-          type: A
+          type: CNAME
+          content: agent-proxy-selfhost-prod-jp-01.svc.plus
+          origin_record:
+            type: A
+            name: agent-proxy-selfhost-prod-jp-01.svc.plus
           target_node: jp-01
           ttl: 1
           proxied: false
@@ -59,7 +63,11 @@ spec:
         multi_node_binding: scheduler
         scheduler_node: us-01
         dns_record:
-          type: A
+          type: CNAME
+          content: agent-proxy-selfhost-prod-us-01.svc.plus
+          origin_record:
+            type: A
+            name: agent-proxy-selfhost-prod-us-01.svc.plus
           target_node: us-01
           ttl: 1
           proxied: false
@@ -80,7 +88,11 @@ spec:
         multi_node_binding: scheduler
         scheduler_node: hk-01
         dns_record:
-          type: A
+          type: CNAME
+          content: agent-proxy-selfhost-prod-hk-01.svc.plus
+          origin_record:
+            type: A
+            name: agent-proxy-selfhost-prod-hk-01.svc.plus
           target_node: hk-01
           ttl: 1
           proxied: false
@@ -101,7 +113,11 @@ spec:
         multi_node_binding: scheduler
         scheduler_node: ph-surfercloud-01
         dns_record:
-          type: A
+          type: CNAME
+          content: agent-proxy-selfhost-prod-ph-01.svc.plus
+          origin_record:
+            type: A
+            name: agent-proxy-selfhost-prod-ph-01.svc.plus
           target_node: ph-surfercloud-01
           ttl: 1
           proxied: false
