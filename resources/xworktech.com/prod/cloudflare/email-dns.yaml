@@ -28,6 +28,16 @@ spec:
       - {name: xworktech.com, type: MX, content: alt3.aspmx.l.google.com, priority: 10}
       - {name: xworktech.com, type: MX, content: alt4.aspmx.l.google.com, priority: 10}
     spf_include: include:_spf.google.com
+    # Google generates the key pair in Admin console -> Apps -> Google Workspace
+    # -> Gmail -> Authenticate email; only the public half lands in DNS, so it
+    # belongs in GitOps rather than Vault. This record predates the reconciler
+    # and was created by hand; it is declared here so rotations go through CI.
+    dkim:
+      - name: google._domainkey.xworktech.com
+        type: TXT
+        selector: google
+        ttl: 3600
+        content: "v=DKIM1;k=rsa;p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArDN0HOdnCdJs9FrOVL/VxTXKW5nJCdLDFYMnqQ8XQCEKao/Y5Owf/Bj3KSRM7uY4QiiFiJ3vHxRdTqMgcnDdAwEbrMHnsYJzrSVBnMb8Ru4bSZS4kv1VMzrez5Huhmpg2o+n5ZKp0VMvhAgjzhcL1QgtFICsXaK1qjXSqRFOj8aQziowZLMZgbMeRbo0Ei1WlZGf5YqFMz8UYg5EhU35nM9/gXWJJ0m4fTTVBkhDE0DixhPIfLtoKkQZdTKntxcKDASXJ7vjfEkv3IHiSMb2ws9hmoXG8bCvzgaf79KBTvbjY4Medpjl9MYUM4GaXy0J1gcbZ8okFII5SsMBQbTHoQIDAQAB"
   dmarc:
     name: _dmarc.xworktech.com
     value: "v=DMARC1; p=none; rua=mailto:security@xworktech.com; adkim=s; aspf=s"
