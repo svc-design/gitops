@@ -1,0 +1,46 @@
+apiVersion: gitops.svc.plus/v1alpha1
+kind: EmailDnsConfig
+metadata:
+  name: svc-plus-transactional-email
+  project: svc.plus
+  environment: prod
+spec:
+  provider: cloudflare
+  # This policy is consumed by the playbook; CI must validate it before any apply.
+  validation:
+    requires_single_apex_spf: true
+    production_apply_requires_explicit_opt_in: true
+  zone: svc.plus
+  # svc.plus carries no Resend domain: transactional mail for console.svc.plus is
+  # sent through Google Workspace SMTP, so this policy has no `resend` block and
+  # the reconciler must skip every Resend API call for this zone.
+  google_workspace:
+    # svc.plus is a Google Workspace *domain alias* of the xworktech.com tenant.
+    # An alias costs nothing and consumes no seat: no-reply@xworktech.com answers
+    # as no-reply@svc.plus on the same mailbox, which is what lets accounts
+    # authenticate as the xworktech.com user while stamping an @svc.plus sender.
+    # Do NOT promote svc.plus to a secondary domain - that turns
+    # no-reply@svc.plus into a separate user and consumes a paid seat.
+    domain_alias_of: xworktech.com
+    mx:
+      - {name: svc.plus, type: MX, content: aspmx.l.google.com, priority: 1}
+      - {name: svc.plus, type: MX, content: alt1.aspmx.l.google.com, priority: 5}
+      - {name: svc.plus, type: MX, content: alt2.aspmx.l.google.com, priority: 5}
+      - {name: svc.plus, type: MX, content: alt3.aspmx.l.google.com, priority: 10}
+      - {name: svc.plus, type: MX, content: alt4.aspmx.l.google.com, priority: 10}
+    spf_include: include:_spf.google.com
+    # A domain alias does not inherit the parent domain's DKIM key. Generate a
+    # separate one in Admin console -> Apps -> Google Workspace -> Gmail ->
+    # Authenticate email with svc.plus selected, then paste the public key here
+    # and re-run the reconcile workflow. While `content` is empty the reconciler
+    # skips this record, so an unsigned placeholder never reaches Cloudflare.
+    dkim:
+      - name: google._domainkey.svc.plus
+        type: TXT
+        selector: google
+        ttl: 3600
+        content: ""
+  dmarc:
+    name: _dmarc.svc.plus
+    value: "v=DMARC1; p=none; rua=mailto:security@xworktech.com; adkim=s; aspf=s"
+    ttl: 3600

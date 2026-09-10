@@ -75,6 +75,16 @@ spec:
     agent-proxy:
       host: agent-proxy-selfhost-uat.onwalk.net
       access: public_uuid
+      regional_pools:
+        - region: jpn-tky
+          entrypoint: jp-xconnect.onwalk.net
+          pool: jp
+        - region: hk
+          entrypoint: hk-xconnect.onwalk.net
+          pool: hk
+        - region: us-ca
+          entrypoint: us-xconnect.onwalk.net
+          pool: us
   cloudflare:
     zone_name: onwalk.net
     pages_project: ai-workspace-portal-uat
