@@ -108,12 +108,13 @@ spec:
       nodes:
         - id: ph-surfercloud-01
           connection_source: vault
-          # This manually provisioned node predates the aggregate
-          # ulighthost-xconnect record. Keep only safe connection metadata in
-          # GitOps and read its existing SSH password from the regional path.
+          # This manually provisioned node is managed through the existing
+          # aggregate Vault record. Keep only safe connection metadata in
+          # GitOps and read SSH_PASSWORD, ansible_user, and public_ipv4 from
+          # the PH-XConnect.svc.plus record.
           ansible_host: 165.154.233.239
           ansible_user: ubuntu
-          credentials_vault_path: prod/XConnect/PH
+          credentials_vault_path: prod/ulighthost-xconnect/PH-XConnect.svc.plus
           enabled: true
           role: standalone
           weight: 100
