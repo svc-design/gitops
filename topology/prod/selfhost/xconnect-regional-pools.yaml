@@ -85,11 +85,11 @@ spec:
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
-        scheduler_node: ph-01
+        scheduler_node: ph-surfercloud-01
       nodes:
-        - id: ph-01
+        - id: ph-surfercloud-01
           connection_source: vault
-          credentials_vault_path: prod/XConnect/PH
+          credentials_vault_path: prod/XConnect/PH/PH-XConnect.svc.plus
           provider: external
           enabled: true
           role: standalone
