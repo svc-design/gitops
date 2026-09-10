@@ -35,7 +35,7 @@ spec:
     - name: jp
       region: jpn-tky
       entrypoint:
-        fqdn: JP-XConnect.svc.plus
+        fqdn: jp-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
@@ -43,7 +43,7 @@ spec:
       legacy_entrypoints:
         - fqdn: tky-proxy.svc.plus
           type: CNAME
-          target: JP-XConnect.svc.plus
+          target: jp-xconnect.svc.plus
       nodes:
         - id: jp-01
           vault_key: jp-01
@@ -53,7 +53,7 @@ spec:
     - name: us
       region: us-ca
       entrypoint:
-        fqdn: US-XConnect.svc.plus
+        fqdn: us-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
@@ -67,7 +67,7 @@ spec:
     - name: hk
       region: hk
       entrypoint:
-        fqdn: HK-XConnect.svc.plus
+        fqdn: hk-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
@@ -81,7 +81,7 @@ spec:
     - name: ph
       region: ph-mnl
       entrypoint:
-        fqdn: PH-XConnect.svc.plus
+        fqdn: ph-xconnect.svc.plus
         mode: auto
         single_node_binding: direct
         multi_node_binding: scheduler
