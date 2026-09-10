@@ -75,6 +75,19 @@ spec:
     agent-proxy:
       host: agent-proxy-selfhost-prod-jp.svc.plus
       access: public_uuid
+      regional_pools:
+        - region: jpn-tky
+          entrypoint: jp-xconnect.svc.plus
+          pool: jp
+        - region: hk
+          entrypoint: hk-xconnect.svc.plus
+          pool: hk
+        - region: us-ca
+          entrypoint: us-xconnect.svc.plus
+          pool: us
+        - region: ph-mnl
+          entrypoint: ph-xconnect.svc.plus
+          pool: ph
   cloudflare:
     zone_name: svc.plus
     pages_project: ai-workspace-portal-prod
